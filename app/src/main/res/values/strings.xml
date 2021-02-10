@@ -1,5 +1,37 @@
 <resources>
     <string name="app_name">Trip Reminder</string>
+
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
+
+    <string name="TripName">Trip name</string>
+    <string name="StartPoint">Start Point</string>
+    <string name="EndPoint">End Point</string>
+    <string name="DateAndTime"><![CDATA[Date & Time]]></string>
+    <!-- TODO: Remove or change this placeholder text -->
+
+    <string name="Date">Date</string>
+    <string name="Time">Time</string>
+    <string name="AddTrip">Add trip</string>
+
+    <string-array name="trip_types">
+        <item>One way</item>
+        <item>Round trip</item>
+    </string-array>
+    <string name="title_activity_main2">MainActivity</string>
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
+    <string name="nav_header_title">Android Studio</string>
+    <string name="nav_header_subtitle">android.studio@android.com</string>
+    <string name="nav_header_desc">Navigation header</string>
+    <string name="action_settings">Settings</string>
+
+    <string name="menu_home">Home</string>
+    <string name="menu_gallery">Gallery</string>
+    <string name="menu_slideshow">Slideshow</string>
+    <string name="History">History</string>
+    <string name="Upcoming">Upcoming</string>
+    <string name="Sync">Sync</string>
+
+
 </resources>
