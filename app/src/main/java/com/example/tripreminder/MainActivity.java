@@ -13,6 +13,7 @@ import androidx.fragment.app.FragmentTransaction;
 
 import android.content.Intent;
 
+import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.util.Log;
@@ -39,6 +40,7 @@ public class MainActivity extends AppCompatActivity {
     FloatingActionButton fab;
     FragmentManager mgr;
     FragmentTransaction trns;
+    Toolbar toolbar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -47,6 +49,7 @@ public class MainActivity extends AppCompatActivity {
         setUpToolbar();
         navigationView = findViewById(R.id.navigation_menu);
         fab = findViewById(R.id.fab);
+        toolbar = findViewById(R.id.toolbar);
 
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -63,6 +66,7 @@ public class MainActivity extends AppCompatActivity {
                 switch (item.getItemId()) {
                     case R.id.nav_upcoming:
                         Toast.makeText(MainActivity.this,"UPCOMING",Toast.LENGTH_LONG).show();
+                        getSupportActionBar().setTitle("Upcoming trips");
                         UpcomingFragment upcomingFragment = new UpcomingFragment();
                         mgr = getSupportFragmentManager();
                         trns = mgr.beginTransaction();
@@ -72,6 +76,7 @@ public class MainActivity extends AppCompatActivity {
 
                     case R.id.nav_history:
                         Toast.makeText(MainActivity.this,"HISTORY",Toast.LENGTH_LONG).show();
+                        getSupportActionBar().setTitle("Trips history");
                         HistoryFragment f = new HistoryFragment();
                         mgr = getSupportFragmentManager();
                         trns = mgr.beginTransaction();
@@ -84,6 +89,7 @@ public class MainActivity extends AppCompatActivity {
                         //sync with firebase
                         break;
                 }
+                drawerLayout.closeDrawers();
                 return false;
             }
 
@@ -115,12 +121,12 @@ public class MainActivity extends AppCompatActivity {
 
     public void setUpToolbar() {
         drawerLayout = findViewById(R.id.drawerLayout);
-        Toolbar toolbar = findViewById(R.id.toolbar);
+        toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+        getSupportActionBar().setTitle("Upcoming trips");
         actionBarDrawerToggle = new ActionBarDrawerToggle(this, drawerLayout, toolbar, R.string.app_name, R.string.app_name);
         drawerLayout.addDrawerListener(actionBarDrawerToggle);
         actionBarDrawerToggle.syncState();
-
 
     }
 }
