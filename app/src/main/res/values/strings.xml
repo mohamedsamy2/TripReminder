@@ -40,6 +40,7 @@
     <string name="user_name">User Name</string>
     <string name="register">Register</string>
     <string name="already_have_an_account">Already have an Account?</string>
+    <string name="StartTrip">Start trip</string>
 
 
 </resources>
