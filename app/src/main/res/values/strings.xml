@@ -36,10 +36,21 @@
     <string name="password">Password</string>
     <string name="login">Login</string>
     <string name="new_user">New user? Register Now</string>
-    <string name="use_other_method">Use other method</string>
+    <string name="use_other_method">_____________ use other method _____________</string>
     <string name="user_name">User Name</string>
     <string name="register">Register</string>
     <string name="already_have_an_account">Already have an Account?</string>
+    <string name="please_enter_user_name">Please enter User Name</string>
+    <string name="please_enter_email">Please enter email</string>
+    <string name="please_enter_password">Please enter password</string>
+    <string name="account_created_successfully">Account Created Successfully</string>
+    <string name="error">"Error : "</string>
+    <string name="creating_new_account">Creating new account</string>
+    <string name="please_wait">Please wait...</string>
+    <string name="signing_in">Signing in</string>
+    <string name="logged_is_successful">Logged is Successful</string>
+    <string name="logged_is_unsuccessful">Logged is Unsuccessful</string>
+    <string name="you_are_not_registered">You are not registered please register</string>
 
 
 </resources>

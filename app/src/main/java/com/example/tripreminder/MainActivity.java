@@ -27,8 +27,18 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
 
+import com.example.tripreminder.Dao.firebaseDao.FirebaseUserDao;
+import com.example.tripreminder.Database.firebase.DataHolder;
+import com.example.tripreminder.model.User;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.navigation.NavigationView;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -36,11 +46,18 @@ public class MainActivity extends AppCompatActivity {
     ActionBarDrawerToggle actionBarDrawerToggle;
     NavigationView navigationView;
     FloatingActionButton fab;
+    private FirebaseUser currentUser;
+    private FirebaseAuth mAuth;
+    private DatabaseReference rootRef;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        mAuth=FirebaseAuth.getInstance();
+        rootRef= FirebaseDatabase.getInstance().getReference();
+        currentUser=mAuth.getCurrentUser();
 
         setUpToolbar();
         navigationView = findViewById(R.id.navigation_menu);
@@ -96,5 +113,36 @@ public class MainActivity extends AppCompatActivity {
         actionBarDrawerToggle.syncState();
 
 
+    }
+    @Override
+    protected void onStart() {
+        super.onStart();
+
+        if(currentUser==null){
+            sendToLoginActivity();
+        }
+
+        else{
+            FirebaseUserDao.getUser(mAuth.getUid(), new ValueEventListener() {
+                @Override
+                public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                    User databaseUser=dataSnapshot.getValue(User.class);
+                    DataHolder.dataBaseUser=databaseUser;
+                    DataHolder.authUser=mAuth.getCurrentUser();
+                }
+
+                @Override
+                public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                }
+            });
+
+        }
+    }
+    private void sendToLoginActivity() {
+        Intent intent= new Intent(MainActivity.this, LoginActivity.class);
+        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK| Intent.FLAG_ACTIVITY_CLEAR_TASK);
+        startActivity(intent);
+        finish();
     }
 }
