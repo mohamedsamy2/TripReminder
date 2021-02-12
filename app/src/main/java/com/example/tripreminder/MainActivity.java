@@ -7,11 +7,13 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.drawerlayout.widget.DrawerLayout;
 
+import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
 import android.content.Intent;
 
+import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.util.Log;
@@ -46,9 +48,14 @@ public class MainActivity extends AppCompatActivity {
     ActionBarDrawerToggle actionBarDrawerToggle;
     NavigationView navigationView;
     FloatingActionButton fab;
+
     private FirebaseUser currentUser;
     private FirebaseAuth mAuth;
     private DatabaseReference rootRef;
+
+    FragmentManager mgr;
+    FragmentTransaction trns;
+    Toolbar toolbar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -58,11 +65,12 @@ public class MainActivity extends AppCompatActivity {
         mAuth=FirebaseAuth.getInstance();
         rootRef= FirebaseDatabase.getInstance().getReference();
         currentUser=mAuth.getCurrentUser();
-
+        
         setUpToolbar();
         navigationView = findViewById(R.id.navigation_menu);
         fab = findViewById(R.id.fab);
-        
+        toolbar = findViewById(R.id.toolbar);
+
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -71,21 +79,28 @@ public class MainActivity extends AppCompatActivity {
                 
             }
         });
+
         navigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
             @Override
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {
                 switch (item.getItemId()) {
-                    case R.id.nav_history:
-                        Toast.makeText(MainActivity.this,"HISTORY",Toast.LENGTH_LONG).show();
-                        HistoryFragment f = new HistoryFragment();
-                        FragmentManager mgr = getSupportFragmentManager();
-                        FragmentTransaction trns = mgr.beginTransaction();
-                        trns.add(R.id.fragment_container_view, f).commit();
-                        //switch fragment to history
-                        break;
-
                     case R.id.nav_upcoming:
                         Toast.makeText(MainActivity.this,"UPCOMING",Toast.LENGTH_LONG).show();
+                        getSupportActionBar().setTitle("Upcoming trips");
+                        UpcomingFragment upcomingFragment = new UpcomingFragment();
+                        mgr = getSupportFragmentManager();
+                        trns = mgr.beginTransaction();
+                        trns.replace(R.id.fragment_container_view, upcomingFragment,"currentFragment").commit();
+                        //switch fragment to upcoming
+                        break;
+
+                    case R.id.nav_history:
+                        Toast.makeText(MainActivity.this,"HISTORY",Toast.LENGTH_LONG).show();
+                        getSupportActionBar().setTitle("Trips history");
+                        HistoryFragment f = new HistoryFragment();
+                        mgr = getSupportFragmentManager();
+                        trns = mgr.beginTransaction();
+                        trns.replace(R.id.fragment_container_view, f, "currentFragment").commit();
                         //switch fragment to history
                         break;
 
@@ -94,6 +109,7 @@ public class MainActivity extends AppCompatActivity {
                         //sync with firebase
                         break;
                 }
+                drawerLayout.closeDrawers();
                 return false;
             }
 
@@ -103,15 +119,34 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+        if (getSupportFragmentManager().findFragmentByTag("currentFragment") == null)
+        {
+            UpcomingFragment upcomingFragment = new UpcomingFragment();
+            mgr = getSupportFragmentManager();
+            trns = mgr.beginTransaction();
+            trns.add(R.id.fragment_container_view, upcomingFragment,"currentFragment").commit();
+        }
+        else
+        {
+            Fragment fragment = getSupportFragmentManager().findFragmentByTag("currentFragment");
+            mgr = getSupportFragmentManager();
+            trns = mgr.beginTransaction();
+            trns.replace(R.id.fragment_container_view, fragment,"currentFragment").commit();
+
+        }
+    }
 
     public void setUpToolbar() {
         drawerLayout = findViewById(R.id.drawerLayout);
-        Toolbar toolbar = findViewById(R.id.toolbar);
+        toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+        getSupportActionBar().setTitle("Upcoming trips");
         actionBarDrawerToggle = new ActionBarDrawerToggle(this, drawerLayout, toolbar, R.string.app_name, R.string.app_name);
         drawerLayout.addDrawerListener(actionBarDrawerToggle);
         actionBarDrawerToggle.syncState();
-
 
     }
     @Override

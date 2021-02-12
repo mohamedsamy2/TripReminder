@@ -46,7 +46,7 @@ public class AddTripActivity extends AppCompatActivity {
         tripTypes.setAdapter(adapter);
 
 
-        Places.initialize(getApplicationContext(), "AIzaSyC862s92XjijHPODw81hBdNAFaMRgQQ4fQ");
+        Places.initialize(getApplicationContext(), "AIzaSyAgqIxtaivfYwAkTXbID2Ew1hra3Exy7Rg");
         startPoint.setFocusable(false);
         endPoint.setFocusable(false);
 

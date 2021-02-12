@@ -9,61 +9,56 @@ import androidx.fragment.app.FragmentActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.example.tripreminder.R;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class HistoryFragment extends Fragment {
-
+public class UpcomingFragment extends Fragment {
+    private static final String TAG = "UpcomingFragment";
     RecyclerView recyclerView;
-    HistoryAdapter myAdapter;
-
-    List<String> history=new ArrayList<>();
-
+    UpcomingAdapter upcomingAdapter;
+    List<String> upcomingList = new ArrayList<>();
 
 
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        history.add("mostaf");
-        history.add("mostaf");
-        history.add("mostaf");
-        history.add("mostaf");
+        upcomingList.add("test");
+        upcomingList.add("test");
+        upcomingList.add("test");
+        upcomingList.add("test");
+        upcomingList.add("test");
 
     }
-
-
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_history, container, false);
-
-
-
+        return inflater.inflate(R.layout.fragment_upcoming, container, false);
     }
+
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        FragmentActivity historyFragment=getActivity();
 
-        recyclerView=view.findViewById(R.id.history_recycler);
+        FragmentActivity upcomingFragment = getActivity();
+        recyclerView = view.findViewById(R.id.upcomingRecycler);
         recyclerView.setHasFixedSize(true);
-
-
-        LinearLayoutManager LayoutManager=new LinearLayoutManager(historyFragment);
+        LinearLayoutManager LayoutManager = new LinearLayoutManager(upcomingFragment);
         LayoutManager.setOrientation(RecyclerView.VERTICAL);
         recyclerView.setLayoutManager(LayoutManager);
-        myAdapter=new HistoryAdapter(historyFragment,history);
-        recyclerView.setAdapter(myAdapter);
+        upcomingAdapter = new UpcomingAdapter(upcomingFragment,upcomingList);
+        recyclerView.setAdapter(upcomingAdapter);
 
         FloatingActionButton fab = getActivity().findViewById(R.id.fab);
         recyclerView.addOnScrollListener(new RecyclerView.OnScrollListener(){
@@ -80,5 +75,9 @@ public class HistoryFragment extends Fragment {
             super.onScrollStateChanged(recyclerView, newState);
         }
     });
+
+        Log.i(TAG, "onViewCreated: DONE");
+
+
     }
 }

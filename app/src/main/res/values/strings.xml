@@ -40,6 +40,7 @@
     <string name="user_name">User Name</string>
     <string name="register">Register</string>
     <string name="already_have_an_account">Already have an Account?</string>
+
     <string name="please_enter_user_name">Please enter User Name</string>
     <string name="please_enter_email">Please enter email</string>
     <string name="please_enter_password">Please enter password</string>
@@ -51,6 +52,8 @@
     <string name="logged_is_successful">Logged is Successful</string>
     <string name="logged_is_unsuccessful">Logged is Unsuccessful</string>
     <string name="you_are_not_registered">You are not registered please register</string>
+
+    <string name="StartTrip">Start trip</string>
 
 
 </resources>
