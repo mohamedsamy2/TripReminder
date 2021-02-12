@@ -13,6 +13,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -63,6 +65,16 @@ public class HistoryFragment extends Fragment {
         myAdapter=new HistoryAdapter(historyFragment,history);
         recyclerView.setAdapter(myAdapter);
 
+        FloatingActionButton fab = getActivity().findViewById(R.id.fab);
+        recyclerView.addOnScrollListener(new RecyclerView.OnScrollListener(){
+            @Override
+            public void onScrolled(RecyclerView recyclerView, int dx, int dy){
+                if (dy > 10)
+                    fab.hide();
+                else if (dy < 5)
+                    fab.show();
+            }
+        });
 
 
     }

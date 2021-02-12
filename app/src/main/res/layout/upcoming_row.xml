@@ -23,11 +23,12 @@
             android:id="@+id/imageView4"
             android:layout_width="31dp"
             android:layout_height="18dp"
-            android:layout_marginTop="32dp"
             android:layout_marginEnd="12dp"
             android:layout_marginRight="12dp"
+            app:layout_constraintBottom_toBottomOf="@+id/upcomingFrom"
             app:layout_constraintEnd_toStartOf="@+id/upcomingFrom"
-            app:layout_constraintTop_toBottomOf="@+id/upcomingTripName"
+            app:layout_constraintTop_toTopOf="@+id/upcomingFrom"
+            app:layout_constraintVertical_bias="0.615"
             app:srcCompat="@drawable/circle"
             app:tint="#03A9F4" />
 
@@ -95,34 +96,40 @@
             android:id="@+id/upcomingTripName"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="12dp"
+            android:layout_marginStart="60dp"
+            android:layout_marginLeft="60dp"
             android:layout_marginEnd="232dp"
             android:layout_marginRight="232dp"
             android:text="Name"
             android:textSize="24sp"
+            app:layout_constraintBottom_toTopOf="@+id/upcomingFrom"
             app:layout_constraintEnd_toStartOf="@+id/cancelTripBtn"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.34" />
 
         <TextView
             android:id="@+id/upcomingFrom"
             android:layout_width="330dp"
             android:layout_height="44dp"
-            android:layout_marginTop="24dp"
-            android:layout_marginEnd="2dp"
-            android:layout_marginRight="2dp"
+            android:layout_marginTop="32dp"
             android:text="From"
             android:textSize="18sp"
             app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.967"
+            app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/cancelTripBtn" />
 
         <ImageView
             android:layout_width="29dp"
             android:layout_height="35dp"
-            android:layout_marginTop="32dp"
-            android:layout_marginEnd="15dp"
-            android:layout_marginRight="15dp"
+            android:layout_marginEnd="12dp"
+            android:layout_marginRight="12dp"
+            app:layout_constraintBottom_toBottomOf="@+id/upcomingTo"
             app:layout_constraintEnd_toStartOf="@+id/upcomingTo"
-            app:layout_constraintTop_toBottomOf="@+id/imageView4"
+            app:layout_constraintTop_toTopOf="@+id/upcomingTo"
+            app:layout_constraintVertical_bias="1.0"
             app:srcCompat="@drawable/to"
             app:tint="#03A9F4" />
 
@@ -131,10 +138,10 @@
             android:layout_width="330dp"
             android:layout_height="44dp"
             android:layout_marginTop="8dp"
-            android:layout_marginEnd="2dp"
-            android:layout_marginRight="2dp"
             android:text="To"
             app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.967"
+            app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/upcomingFrom" />
 
         <ImageButton

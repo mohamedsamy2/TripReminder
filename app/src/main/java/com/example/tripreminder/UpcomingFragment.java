@@ -15,6 +15,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.example.tripreminder.R;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -58,6 +59,18 @@ public class UpcomingFragment extends Fragment {
         recyclerView.setLayoutManager(LayoutManager);
         upcomingAdapter = new UpcomingAdapter(upcomingFragment,upcomingList);
         recyclerView.setAdapter(upcomingAdapter);
+
+        FloatingActionButton fab = getActivity().findViewById(R.id.fab);
+        recyclerView.addOnScrollListener(new RecyclerView.OnScrollListener(){
+            @Override
+            public void onScrolled(RecyclerView recyclerView, int dx, int dy){
+                if (dy > 10)
+                    fab.hide();
+                else if (dy < 5)
+                    fab.show();
+            }
+        });
+
         Log.i(TAG, "onViewCreated: DONE");
 
 
