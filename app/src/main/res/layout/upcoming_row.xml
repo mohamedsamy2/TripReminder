@@ -28,7 +28,6 @@
             app:layout_constraintBottom_toBottomOf="@+id/upcomingFrom"
             app:layout_constraintEnd_toStartOf="@+id/upcomingFrom"
             app:layout_constraintTop_toTopOf="@+id/upcomingFrom"
-            app:layout_constraintVertical_bias="0.615"
             app:srcCompat="@drawable/circle"
             app:tint="#03A9F4" />
 
@@ -59,10 +58,10 @@
 
         <TextView
             android:id="@+id/upcomingTime"
-            android:layout_width="51dp"
+            android:layout_width="80dp"
             android:layout_height="wrap_content"
-            android:layout_marginStart="35dp"
-            android:layout_marginLeft="35dp"
+            android:layout_marginStart="20dp"
+            android:layout_marginLeft="20dp"
             android:gravity="center"
             android:text="10:30"
             app:layout_constraintStart_toEndOf="@+id/upcomingDateText"
@@ -75,17 +74,19 @@
             android:layout_marginStart="20dp"
             android:layout_marginLeft="20dp"
             android:layout_marginTop="3dp"
+            android:clipToPadding="false"
+            android:paddingBottom="30dp"
             android:text="13/12/2015"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/imageView2" />
 
         <Button
             android:id="@+id/startTripBtn"
-            android:layout_width="116dp"
-            android:layout_height="55dp"
-            android:layout_marginEnd="16dp"
-            android:layout_marginRight="16dp"
-            android:layout_marginBottom="16dp"
+            android:layout_width="137dp"
+            android:layout_height="62dp"
+            android:layout_marginEnd="24dp"
+            android:layout_marginRight="24dp"
+            android:layout_marginBottom="48dp"
             android:background="@drawable/startroundcorner"
             android:text="@string/StartTrip"
             android:textColor="@color/white"
@@ -129,7 +130,6 @@
             app:layout_constraintBottom_toBottomOf="@+id/upcomingTo"
             app:layout_constraintEnd_toStartOf="@+id/upcomingTo"
             app:layout_constraintTop_toTopOf="@+id/upcomingTo"
-            app:layout_constraintVertical_bias="1.0"
             app:srcCompat="@drawable/to"
             app:tint="#03A9F4" />
 

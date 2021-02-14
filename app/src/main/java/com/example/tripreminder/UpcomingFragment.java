@@ -14,29 +14,57 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.example.tripreminder.R;
+import com.example.tripreminder.model.Trip;
+import com.example.tripreminder.Database.Room.RoomDatabase;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.google.firebase.auth.FirebaseAuth;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import io.reactivex.SingleObserver;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.disposables.Disposable;
+import io.reactivex.schedulers.Schedulers;
 
 public class UpcomingFragment extends Fragment {
     private static final String TAG = "UpcomingFragment";
     RecyclerView recyclerView;
     UpcomingAdapter upcomingAdapter;
-    List<String> upcomingList = new ArrayList<>();
+    List<Trip> upcomingList = new ArrayList<>();
+    RoomDatabase database;
 
 
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        upcomingList.add("test");
-        upcomingList.add("test");
-        upcomingList.add("test");
-        upcomingList.add("test");
-        upcomingList.add("test");
+        database = RoomDatabase.getInstance(getContext());
 
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        database.roomTripDao().getTripsByUser(FirebaseAuth.getInstance().getUid()).subscribeOn(Schedulers.computation())
+                .observeOn(AndroidSchedulers.mainThread()).subscribe(new SingleObserver<List<Trip>>() {
+            @Override
+            public void onSubscribe(@io.reactivex.annotations.NonNull Disposable d) {
+
+            }
+
+            @Override
+            public void onSuccess(@io.reactivex.annotations.NonNull List<Trip> trips) {
+
+                upcomingAdapter.setList(trips);
+                upcomingAdapter.notifyDataSetChanged();
+            }
+
+            @Override
+            public void onError(@io.reactivex.annotations.NonNull Throwable e) {
+
+            }
+        });
     }
 
     @Override
@@ -60,24 +88,11 @@ public class UpcomingFragment extends Fragment {
         upcomingAdapter = new UpcomingAdapter(upcomingFragment,upcomingList);
         recyclerView.setAdapter(upcomingAdapter);
 
-        FloatingActionButton fab = getActivity().findViewById(R.id.fab);
-        recyclerView.addOnScrollListener(new RecyclerView.OnScrollListener(){
-        @Override
-        public void onScrolled(RecyclerView recyclerView, int dx, int dy){
-            if (dy<5 && !fab.isShown())
-                fab.show();
-            else if(dy>5 && fab.isShown())
-                fab.hide();
-        }
-
-        @Override
-        public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
-            super.onScrollStateChanged(recyclerView, newState);
-        }
-    });
 
         Log.i(TAG, "onViewCreated: DONE");
 
 
     }
+
+
 }
