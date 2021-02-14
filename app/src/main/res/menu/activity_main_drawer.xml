@@ -21,5 +21,9 @@
             android:id="@+id/nav_sync"
             android:icon="@android:drawable/ic_popup_sync"
             android:title="@string/Sync" />
+        <item
+            android:id="@+id/nav_logout"
+            android:icon="@drawable/ic_logut"
+            android:title="@string/logout"/>
     </group>
 </menu>

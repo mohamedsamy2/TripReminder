@@ -9,6 +9,7 @@
     android:clipToPadding="true"
     app:cardBackgroundColor="#FFFFFF"
     app:cardCornerRadius="12dp"
+    android:layout_margin="8dp"
     app:cardElevation="12dp">
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -19,21 +20,24 @@
 
         <TextView
             android:id="@+id/textView"
-            android:layout_width="276dp"
-            android:layout_height="55dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:gravity="clip_vertical"
             android:paddingLeft="20dp"
             android:text="note"
+            android:layout_margin="12dp"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"/>
 
         <ImageButton
             android:id="@+id/imageButton"
             android:layout_width="45dp"
             android:layout_height="55dp"
             android:background="#FFFFFF"
-            app:layout_constraintBottom_toBottomOf="@+id/textView"
-            app:layout_constraintStart_toEndOf="@+id/textView"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintEnd_toStartOf="@id/delete_note_btn"
             app:srcCompat="@android:drawable/ic_menu_add" />
 
         <ImageButton
@@ -41,8 +45,10 @@
             android:layout_width="46dp"
             android:layout_height="55dp"
             android:background="#FFFFFF"
-            app:layout_constraintBottom_toBottomOf="@+id/textView"
-            app:layout_constraintStart_toEndOf="@+id/imageButton"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            android:layout_margin="12dp"
             app:srcCompat="@android:drawable/ic_menu_delete" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>

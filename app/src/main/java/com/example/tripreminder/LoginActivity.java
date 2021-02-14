@@ -103,7 +103,7 @@ public class LoginActivity extends AppCompatActivity {
                                 uEmail=databaseUser.getEmail();
                                 DataHolder.dataBaseUser=databaseUser;
                                 DataHolder.authUser=mAuth.getCurrentUser();
-                                saveDataInSharedPerefrence(getApplicationContext());
+                                saveDataInSharedPerefrence();
                                 sendToMainActivity();
                                 Toast.makeText(LoginActivity.this,""+ R.string.logged_is_successful, Toast.LENGTH_SHORT).show();
                                 loadingBar.dismiss();
@@ -212,7 +212,7 @@ public class LoginActivity extends AppCompatActivity {
                     DataHolder.authUser=mAuth.getCurrentUser();
                     uName=user.getUserName();
                     uEmail=user.getEmail();
-                    saveDataInSharedPerefrence(getApplicationContext());
+                    saveDataInSharedPerefrence();
                     sendToMainActivity();
                     Toast.makeText(LoginActivity.this, ""+R.string.account_created_successfully, Toast.LENGTH_SHORT).show();
                     loadingBar.dismiss();
@@ -244,11 +244,11 @@ public class LoginActivity extends AppCompatActivity {
         startActivity(intent);
         finish();
     }
-    private void saveDataInSharedPerefrence(Context applicationContext) {
-        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(applicationContext);
+    private void saveDataInSharedPerefrence() {
+        SharedPreferences preferences = getPreferences(Context.MODE_PRIVATE);
         SharedPreferences.Editor editor=preferences.edit();
         editor.putString("Name",uName);
         editor.putString("Email",uEmail);
-        editor.commit();
+        editor.apply();
     }
 }
