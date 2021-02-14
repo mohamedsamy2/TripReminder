@@ -4,11 +4,14 @@ import android.content.Context;
 
 import androidx.room.Database;
 import androidx.room.Room;
+import androidx.room.TypeConverters;
 
+import com.example.tripreminder.Dao.RoomDao.Converter;
 import com.example.tripreminder.Dao.RoomDao.RoomDao;
 import com.example.tripreminder.model.Trip;
 
 @Database(entities = Trip.class, version = 1)
+@TypeConverters(Converter.class)
     public abstract class RoomDatabase extends androidx.room.RoomDatabase {
 
     private static RoomDatabase instance;

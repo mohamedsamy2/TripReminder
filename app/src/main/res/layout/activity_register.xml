@@ -6,18 +6,33 @@
     android:layout_height="match_parent"
     android:padding="12dp"
     android:layout_gravity="center"
-    android:background="@color/design_default_color_secondary_variant"
+    android:background="@color/white"
     tools:context=".LoginActivity">
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent">
-        <ImageView
+        <TextView
+            android:id="@+id/text"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:fontFamily="sans-serif-condensed-medium"
+            android:gravity="center"
+            android:text="@string/register"
+            android:textColor="@color/purple_500"
+            android:textSize="50sp"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"/>
+        <de.hdodenhof.circleimageview.CircleImageView
             android:id="@+id/imgLogo"
             android:layout_width="150dp"
             android:layout_height="150dp"
             android:src="@drawable/ic_user_name"
             android:padding="12dp"
-            app:layout_constraintTop_toTopOf="parent"
+            app:civ_border_color="@color/purple_500"
+            app:civ_border_width="1dp"
+            app:layout_constraintTop_toBottomOf="@id/text"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintBottom_toTopOf="@id/topguid"/>
@@ -31,18 +46,17 @@
             android:id="@+id/cardView"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            app:cardElevation="8dp"
-            app:cardCornerRadius="8dp"
-            android:padding="12dp"
-            app:contentPadding="24dp"
-            android:layout_margin="24dp"
+            android:elevation="4dp"
+            app:cardElevation="4dp"
+            app:cardCornerRadius="24dp"
+            android:layout_margin="8dp"
             app:layout_constraintTop_toBottomOf="@id/topguid"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent">
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:padding="12dp">
+                android:background="@drawable/button_bg">
                 <EditText
                     android:id="@+id/edtUserName"
                     android:layout_width="match_parent"
@@ -50,9 +64,10 @@
                     android:drawableStart="@drawable/ic_user_name"
                     android:drawableLeft="@drawable/ic_user_name"
                     android:drawablePadding="8dp"
-                    android:layout_margin="8dp"
+                    android:layout_margin="16dp"
+                    android:layout_marginTop="16dp"
+                    android:padding="12dp"
                     android:hint="@string/user_name"
-                    android:textColorHint="@color/design_default_color_secondary"
                     app:layout_constraintTop_toTopOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"/>
@@ -64,9 +79,10 @@
                     android:drawableStart="@drawable/ic_email"
                     android:drawableLeft="@drawable/ic_email"
                     android:drawablePadding="8dp"
-                    android:layout_margin="8dp"
+                    android:layout_margin="16dp"
+                    android:layout_marginTop="16dp"
+                    android:padding="12dp"
                     android:hint="@string/email"
-                    android:textColorHint="@color/design_default_color_secondary"
                     app:layout_constraintTop_toBottomOf="@id/edtUserName"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"/>
@@ -78,22 +94,25 @@
                     android:drawableStart="@drawable/ic_password"
                     android:drawableLeft="@drawable/ic_password"
                     android:drawablePadding="8dp"
-                    android:layout_margin="8dp"
+                    android:layout_margin="16dp"
+                    android:layout_marginTop="16dp"
+                    android:padding="12dp"
                     android:hint="@string/password"
-                    android:textColorHint="@color/design_default_color_secondary"
                     app:layout_constraintTop_toBottomOf="@id/edtEmail"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"/>
                 <Button
                     android:id="@+id/btnRegister"
-                    android:layout_width="wrap_content"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:text="@string/register"
                     android:padding="12dp"
                     android:textSize="24sp"
-                    android:textColor="@color/white"
-                    android:layout_margin="12dp"
+                    android:textColor="@color/purple_500"
+                    android:layout_margin="16dp"
+                    android:layout_marginTop="16dp"
                     android:background="@drawable/button_bg"
+                    android:fontFamily="sans-serif-condensed-medium"
                     app:backgroundTint="@null"
                     app:layout_constraintTop_toBottomOf="@id/edtPassword"
                     app:layout_constraintStart_toStartOf="parent"
@@ -103,11 +122,13 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:textSize="18sp"
-                    android:layout_margin="12dp"
+                    android:layout_margin="16dp"
+                    android:layout_marginTop="16dp"
+                    android:padding="12dp"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/btnRegister"
-                    android:textColor="@color/design_default_color_secondary"
+                    android:textColor="@color/purple_700"
                     android:text="@string/already_have_an_account"/>
             </androidx.constraintlayout.widget.ConstraintLayout>
         </androidx.cardview.widget.CardView>

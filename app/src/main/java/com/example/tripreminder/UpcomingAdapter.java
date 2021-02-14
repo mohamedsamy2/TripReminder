@@ -17,7 +17,9 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.tripreminder.Database.Room.RoomDatabase;
 import com.example.tripreminder.model.Trip;
+import com.google.gson.Gson;
 
+import java.io.Serializable;
 import java.util.List;
 
 import io.reactivex.CompletableObserver;
@@ -88,6 +90,15 @@ public class UpcomingAdapter extends RecyclerView.Adapter<UpcomingAdapter.ViewHo
                 notifyDataSetChanged();
             }
         });
+        holder.addNotesBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent  intent=new Intent(holder.itemView.getContext(),AddNotesActivity.class);
+                intent.putExtra("trip",new Gson().toJson(list.get(position)));
+                holder.itemView.getContext().startActivity(intent);
+
+            }
+        });
 
 
 
@@ -110,6 +121,8 @@ public class UpcomingAdapter extends RecyclerView.Adapter<UpcomingAdapter.ViewHo
         public Button startTripBtn;
         public ConstraintLayout constraintLayout;
         public View layout;
+        public ImageButton addNotesBtn;
+
 
         public ViewHolder(View v)
         {
@@ -122,6 +135,8 @@ public class UpcomingAdapter extends RecyclerView.Adapter<UpcomingAdapter.ViewHo
             cancelTripBtn = v.findViewById(R.id.cancelTripBtn);
             startTripBtn = v.findViewById(R.id.startTripBtn);
             constraintLayout = v.findViewById(R.id.upcomingRow);
+
+            addNotesBtn=v.findViewById(R.id.add_note_btn);
             Log.i(TAG, "ViewHolder: ");
         }
 

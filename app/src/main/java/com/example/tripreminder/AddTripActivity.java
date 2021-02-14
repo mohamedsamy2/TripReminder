@@ -137,6 +137,8 @@ public class AddTripActivity extends AppCompatActivity implements TimePickerDial
         startPoint = findViewById(R.id.startPointEditText);
         endPoint = findViewById(R.id.endPointEditText);
         tripTypes = findViewById(R.id.tripType);
+
+        
         timePicked = findViewById(R.id.timePickerTextView);
         datePicked = findViewById(R.id.datePickerTextView);
         addTrip = findViewById(R.id.addTripBtn);

@@ -4,7 +4,11 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.content.Intent;
 import android.os.Bundle;
+
+import com.example.tripreminder.model.Trip;
+import com.google.gson.Gson;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -15,19 +19,15 @@ public class AddNotesActivity extends AppCompatActivity {
     List<String> notes= new ArrayList<>();
     RecyclerView recyclerView;
     NotesAdapter myAdapter;
+    Trip trip;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_notes);
 
-        notes.add("mostafa ahmed");
-        notes.add("mostafa ahmed");
-        notes.add("mostafa ahmed");
-        notes.add("mostafa ahmed");
-        notes.add("mostafa ahmed");
-        notes.add("mostafa ahmed");
-        notes.add("mostafa ahmed");
+        Intent intent=getIntent();
+        trip=new Gson().fromJson(intent.getStringExtra("trip"),Trip.class);
 
         recyclerView=findViewById(R.id.notes_recycler);
         recyclerView.setHasFixedSize(true);
@@ -36,7 +36,7 @@ public class AddNotesActivity extends AppCompatActivity {
         LinearLayoutManager LayoutManager=new LinearLayoutManager(this);
         LayoutManager.setOrientation(RecyclerView.VERTICAL);
         recyclerView.setLayoutManager(LayoutManager);
-        myAdapter=new NotesAdapter(AddNotesActivity.this,notes);
+        myAdapter=new NotesAdapter(AddNotesActivity.this,trip.notes);
         recyclerView.setAdapter(myAdapter);
 
 

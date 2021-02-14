@@ -11,11 +11,20 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
+import android.content.Context;
 import android.content.Intent;
+
+import android.content.SharedPreferences;
+import android.graphics.Color;
+import android.graphics.drawable.Drawable;
+import android.os.Bundle;
+import android.preference.PreferenceManager;
+import android.util.Log;
 
 import android.os.Bundle;
 import android.view.View;
 import android.view.MenuItem;
+import android.widget.TextView;
 import android.widget.Toast;
 import com.example.tripreminder.Dao.firebaseDao.FirebaseUserDao;
 import com.example.tripreminder.Database.firebase.DataHolder;
@@ -37,6 +46,7 @@ public class MainActivity extends AppCompatActivity {
     ActionBarDrawerToggle actionBarDrawerToggle;
     NavigationView navigationView;
     FloatingActionButton fab;
+    TextView txtUserName,txtEmail;
 
     private FirebaseUser currentUser;
     private FirebaseAuth mAuth;
@@ -54,12 +64,14 @@ public class MainActivity extends AppCompatActivity {
         mAuth=FirebaseAuth.getInstance();
         rootRef= FirebaseDatabase.getInstance().getReference();
         currentUser=mAuth.getCurrentUser();
-        
+
         setUpToolbar();
         navigationView = findViewById(R.id.navigation_menu);
         fab = findViewById(R.id.fab);
         toolbar = findViewById(R.id.toolbar);
 
+        txtUserName=findViewById(R.id.txtName);
+        txtEmail=findViewById(R.id.txtUserEmail);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -96,6 +108,9 @@ public class MainActivity extends AppCompatActivity {
                     case R.id.nav_sync:
                         Toast.makeText(MainActivity.this,"SYNC",Toast.LENGTH_LONG).show();
                         //sync with firebase
+                        break;
+                    case R.id.nav_logout:
+                        logout();
                         break;
                 }
                 drawerLayout.closeDrawers();
@@ -155,6 +170,7 @@ public class MainActivity extends AppCompatActivity {
                     User databaseUser=dataSnapshot.getValue(User.class);
                     DataHolder.dataBaseUser=databaseUser;
                     DataHolder.authUser=mAuth.getCurrentUser();
+
                 }
 
                 @Override
@@ -162,6 +178,7 @@ public class MainActivity extends AppCompatActivity {
 
                 }
             });
+            //getDataFromSharedPerefrence();
 
         }
     }
@@ -171,4 +188,20 @@ public class MainActivity extends AppCompatActivity {
         startActivity(intent);
         finish();
     }
+    public void getDataFromSharedPerefrence(){
+
+        SharedPreferences preferences = getPreferences(Context.MODE_PRIVATE);
+        txtUserName.setText(preferences.getString("Name","default"));
+        txtEmail.setText(preferences.getString("Email","default"));
+
+    }
+    public void logout(){
+        //delete all trips
+        FirebaseAuth.getInstance().signOut();
+        DataHolder.dataBaseUser=null;
+        DataHolder.authUser=null;
+        sendToLoginActivity();
+    }
+
+
 }

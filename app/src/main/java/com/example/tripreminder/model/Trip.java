@@ -13,6 +13,16 @@ public class Trip {
     String tripName;
     String userID;
     String source;
+    public List<String> notes;
+
+    public List<String> getNotes() {
+        return notes;
+    }
+
+    public void setNotes(List<String> notes) {
+        this.notes = notes;
+    }
+
     String destination;
     String date;
     String time;
@@ -21,7 +31,9 @@ public class Trip {
     public Trip() {
     }
 
-    public Trip(String tripName, String userID, String source, String destination, String date, String time, String status, String type) {
+
+
+    public Trip(String tripName, String userID, String source, String destination, String date, String time, String status, String type,List<String> notes) {
         this.tripName = tripName;
         this.userID = userID;
         this.source = source;
@@ -30,6 +42,7 @@ public class Trip {
         this.time = time;
         this.status = status;
         this.type = type;
+        this.notes=notes;
     }
 
 
