@@ -65,20 +65,5 @@ public class HistoryFragment extends Fragment {
         myAdapter=new HistoryAdapter(historyFragment,history);
         recyclerView.setAdapter(myAdapter);
 
-        FloatingActionButton fab = getActivity().findViewById(R.id.fab);
-        recyclerView.addOnScrollListener(new RecyclerView.OnScrollListener(){
-        @Override
-        public void onScrolled(RecyclerView recyclerView, int dx, int dy){
-            if (dy<5 && !fab.isShown())
-                fab.show();
-            else if(dy>5 && fab.isShown())
-                fab.hide();
-        }
-
-        @Override
-        public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
-            super.onScrollStateChanged(recyclerView, newState);
-        }
-    });
     }
 }

@@ -20,18 +20,12 @@ import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.util.Log;
-import android.view.View;
-import android.widget.Button;
-import android.widget.ImageButton;
-import android.widget.ImageView;
-import android.widget.TextView;
 
 import android.os.Bundle;
-import android.view.MenuItem;
 import android.view.View;
-import android.widget.Button;
+import android.view.MenuItem;
+import android.widget.TextView;
 import android.widget.Toast;
-
 import com.example.tripreminder.Dao.firebaseDao.FirebaseUserDao;
 import com.example.tripreminder.Database.firebase.DataHolder;
 import com.example.tripreminder.model.User;
@@ -44,6 +38,7 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+
 
 public class MainActivity extends AppCompatActivity {
 
@@ -124,6 +119,8 @@ public class MainActivity extends AppCompatActivity {
 
 
         });
+
+
 
 
     }

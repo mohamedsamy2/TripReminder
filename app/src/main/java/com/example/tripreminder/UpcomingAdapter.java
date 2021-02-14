@@ -1,6 +1,8 @@
 package com.example.tripreminder;
 
 import android.content.Context;
+import android.content.Intent;
+import android.net.Uri;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -13,12 +15,21 @@ import androidx.annotation.NonNull;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.tripreminder.Database.Room.RoomDatabase;
+import com.example.tripreminder.model.Trip;
+
 import java.util.List;
+
+import io.reactivex.CompletableObserver;
+import io.reactivex.disposables.Disposable;
+import io.reactivex.schedulers.Schedulers;
 
 public class UpcomingAdapter extends RecyclerView.Adapter<UpcomingAdapter.ViewHolder>{
     private static final String TAG = "UpcomingAdapter";
+
     Context context;
-    List<String> list;
+    List<Trip> list;
+    RoomDatabase database;
 
     @NonNull
     @Override
@@ -26,13 +37,60 @@ public class UpcomingAdapter extends RecyclerView.Adapter<UpcomingAdapter.ViewHo
         LayoutInflater inflater=LayoutInflater.from(parent.getContext());
         View v=inflater.inflate(R.layout.upcoming_row,parent,false);
         UpcomingAdapter.ViewHolder viewHolder = new UpcomingAdapter.ViewHolder(v);
-
         Log.i(TAG, "onCreateViewHolder: ");
         return viewHolder;
     }
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
+        holder.tripNameTxt.setText(list.get(position).getTripName());
+        holder.fromText.setText(list.get(position).getSource());
+        holder.toText.setText(list.get(position).getDestination());
+        holder.timeText.setText(list.get(position).getTime());
+        holder.dateText.setText(list.get(position).getDate());
+
+        holder.startTripBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                        Uri gmmIntentUri = Uri.parse("http://maps.google.com/maps?daddr="+holder.toText.getText().toString().replace(" ","+"));
+                        Intent mapIntent = new Intent(Intent.ACTION_VIEW, gmmIntentUri);
+                        mapIntent.setPackage("com.google.android.apps.maps");
+                        context.startActivity(mapIntent);
+
+            }
+        });
+
+
+        holder.cancelTripBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                database = RoomDatabase.getInstance(holder.itemView.getContext());
+                database.roomTripDao().deleteTrip(list.get(position)).subscribeOn(Schedulers.computation())
+                        .subscribe(new CompletableObserver() {
+                            @Override
+                            public void onSubscribe(@io.reactivex.annotations.NonNull Disposable d) {
+
+                            }
+
+                            @Override
+                            public void onComplete() {
+
+                            }
+
+                            @Override
+                            public void onError(@io.reactivex.annotations.NonNull Throwable e) {
+
+                            }
+                        });
+
+                list.remove(position);
+                notifyDataSetChanged();
+            }
+        });
+
+
+
         Log.i(TAG, "onBindViewHolder: ");
     }
 
@@ -66,15 +124,17 @@ public class UpcomingAdapter extends RecyclerView.Adapter<UpcomingAdapter.ViewHo
             constraintLayout = v.findViewById(R.id.upcomingRow);
             Log.i(TAG, "ViewHolder: ");
         }
-        
+
     }
 
-    public UpcomingAdapter(Context _context, List<String> list)
+    public UpcomingAdapter(Context _context, List<Trip> list)
     {
         this.context = _context;
         this.list = list;
         Log.i(TAG, "UpcomingAdapter: ");
     }
 
-
+    public void setList(List<Trip> list) {
+        this.list = list;
+    }
 }
