@@ -112,9 +112,9 @@
         android:layout_marginStart="16dp"
         android:layout_marginLeft="16dp"
         android:layout_marginTop="8dp"
+        android:background="#0000"
         android:scaleType="fitCenter"
         android:tint="#3F51B5"
-        android:background="#0000"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textView4"
         app:srcCompat="@drawable/calendar" />
@@ -126,9 +126,9 @@
         android:layout_marginTop="8dp"
         android:layout_marginEnd="16dp"
         android:layout_marginRight="16dp"
+        android:background="#0000"
         android:scaleType="fitCenter"
         android:tint="#3F51B5"
-        android:background="#0000"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textView5"
         app:srcCompat="@drawable/clock" />
@@ -155,5 +155,25 @@
         app:layout_constraintHorizontal_bias="0.494"
         app:layout_constraintStart_toEndOf="@+id/datePickerButton"
         app:layout_constraintTop_toBottomOf="@+id/endPointEditText" />
+
+    <TextView
+        android:id="@+id/datePickerTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="12dp"
+        android:textSize="16sp"
+        app:layout_constraintEnd_toEndOf="@+id/datePickerButton"
+        app:layout_constraintStart_toStartOf="@+id/datePickerButton"
+        app:layout_constraintTop_toBottomOf="@+id/datePickerButton" />
+
+    <TextView
+        android:id="@+id/timePickerTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="12dp"
+        android:textSize="16sp"
+        app:layout_constraintEnd_toEndOf="@+id/timePickerButton"
+        app:layout_constraintStart_toStartOf="@+id/timePickerButton"
+        app:layout_constraintTop_toBottomOf="@+id/timePickerButton" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
