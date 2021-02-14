@@ -6,6 +6,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    android:layout_margin="10dp"
     android:clipToPadding="true"
     app:cardBackgroundColor="#FFFFFF"
     app:cardCornerRadius="12dp"
@@ -19,8 +20,10 @@
 
         <TextView
             android:id="@+id/textView"
-            android:layout_width="276dp"
-            android:layout_height="55dp"
+            android:layout_width="260dp"
+            android:layout_height="54dp"
+            android:layout_marginStart="20dp"
+            android:layout_marginLeft="20dp"
             android:gravity="clip_vertical"
             android:paddingLeft="20dp"
             android:text="note"
@@ -31,6 +34,8 @@
             android:id="@+id/imageButton"
             android:layout_width="45dp"
             android:layout_height="55dp"
+            android:layout_marginStart="0dp"
+            android:layout_marginLeft="0dp"
             android:background="#FFFFFF"
             app:layout_constraintBottom_toBottomOf="@+id/textView"
             app:layout_constraintStart_toEndOf="@+id/textView"
@@ -42,6 +47,8 @@
             android:layout_height="55dp"
             android:background="#FFFFFF"
             app:layout_constraintBottom_toBottomOf="@+id/textView"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toEndOf="@+id/imageButton"
             app:srcCompat="@android:drawable/ic_menu_delete" />
 

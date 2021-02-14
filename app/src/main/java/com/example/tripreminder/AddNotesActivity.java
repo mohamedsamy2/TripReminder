@@ -42,6 +42,18 @@ public class AddNotesActivity extends AppCompatActivity {
 
 
     }
+
+    /*private void getData() {
+        list = new ArrayList<>();
+        list = DatabaseClass.getDatabase(getApplicationContext()).getDao().getAllData();
+        recyclerView.setAdapter(new UserAdapter(getApplicationContext(), list, new UserAdapter.DeleteItemClicklistner() {
+            @Override
+            public void onItemDelete(int position, int id) {
+                DatabaseClass.getDatabase(getApplicationContext()).getDao().deleteData(id);
+                getData();
+            }
+        }));
+    }*/
 }
 
 

@@ -14,9 +14,12 @@ public class NotesAdapter extends RecyclerView.Adapter<NotesAdapter.ViewHolder>{
     Context context;
     List<String> list;
 
+
+
     public NotesAdapter(Context context, List<String> list) {
         this.context = context;
         this.list = list;
+
     }
 
     @NonNull
@@ -39,6 +42,7 @@ public class NotesAdapter extends RecyclerView.Adapter<NotesAdapter.ViewHolder>{
         holder.delete.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
 
 
 
@@ -68,6 +72,7 @@ public class NotesAdapter extends RecyclerView.Adapter<NotesAdapter.ViewHolder>{
         public ImageButton delete;
         public ImageButton add;
         public TextView txt;
+        public RecyclerView recyclerView;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -83,6 +88,9 @@ public class NotesAdapter extends RecyclerView.Adapter<NotesAdapter.ViewHolder>{
 
 
     }
+
+
+
 }
 
 

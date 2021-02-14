@@ -20,10 +20,8 @@
 
         <TextView
             android:id="@+id/name_txt"
-            android:layout_width="229dp"
-            android:layout_height="28dp"
-            android:layout_marginStart="4dp"
-            android:layout_marginLeft="4dp"
+            android:layout_width="217dp"
+            android:layout_height="31dp"
             android:layout_marginTop="12dp"
             android:fontFamily="sans-serif-medium"
             android:shadowColor="#03A9F4"
@@ -53,7 +51,7 @@
             android:layout_marginTop="8dp"
             android:layout_marginEnd="4dp"
             android:layout_marginRight="4dp"
-            android:background="#03A9F4"
+            android:background="@drawable/btn_up"
             android:scaleType="fitCenter"
             android:src="@drawable/delete"
             android:tint="#FFFFFF"
@@ -68,7 +66,7 @@
             android:layout_marginTop="8dp"
             android:layout_marginEnd="4dp"
             android:layout_marginRight="4dp"
-            android:background="#03A9F4"
+            android:background="@drawable/btn_up"
             android:scaleType="fitCenter"
             android:src="@drawable/down"
             android:tint="#FFFFFF"
@@ -83,6 +81,7 @@
             android:layout_marginLeft="16dp"
             android:layout_marginTop="32dp"
             android:tint="#03A9F4"
+            android:visibility="gone"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/name_img"
             app:srcCompat="@drawable/circle" />
@@ -95,6 +94,7 @@
             android:layout_marginLeft="16dp"
             android:layout_marginTop="24dp"
             android:tint="#03A9F4"
+            android:visibility="gone"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/from_img"
             app:srcCompat="@drawable/to" />
@@ -107,6 +107,7 @@
             android:layout_marginLeft="32dp"
             android:layout_marginTop="48dp"
             android:tint="#03A9F4"
+            android:visibility="gone"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/to_img"
             app:srcCompat="@drawable/date" />
@@ -118,6 +119,7 @@
             android:layout_marginTop="164dp"
 
             android:tint="#03A9F4"
+            android:visibility="gone"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.679"
             app:layout_constraintStart_toEndOf="@+id/time_img"
@@ -133,27 +135,30 @@
             android:layout_marginTop="48dp"
 
             android:tint="#03A9F4"
+            android:visibility="gone"
             app:layout_constraintStart_toEndOf="@+id/date_img"
             app:layout_constraintTop_toBottomOf="@+id/to_txt"
             app:srcCompat="@drawable/time" />
 
         <TextView
             android:id="@+id/from_txt"
-            android:layout_width="340dp"
+            android:layout_width="326dp"
             android:layout_height="34dp"
             android:layout_marginStart="12dp"
             android:layout_marginLeft="12dp"
             android:text="Cairo"
+            android:visibility="gone"
             app:layout_constraintStart_toEndOf="@+id/from_img"
             app:layout_constraintTop_toTopOf="@+id/from_img" />
 
         <TextView
             android:id="@+id/to_txt"
-            android:layout_width="340dp"
+            android:layout_width="330dp"
             android:layout_height="33dp"
             android:layout_marginStart="12dp"
             android:layout_marginLeft="12dp"
             android:text="ismailia"
+            android:visibility="gone"
             app:layout_constraintBottom_toBottomOf="@+id/to_img"
             app:layout_constraintStart_toEndOf="@+id/to_img" />
 
@@ -165,6 +170,7 @@
             android:layout_marginLeft="24dp"
             android:layout_marginTop="16dp"
             android:text="13/12/2015"
+            android:visibility="gone"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/date_img" />
 
@@ -177,6 +183,7 @@
             android:layout_marginTop="12dp"
             android:gravity="center"
             android:text="10:30"
+            android:visibility="gone"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toEndOf="@+id/date_txt"
             app:layout_constraintTop_toBottomOf="@+id/time_img"
@@ -188,6 +195,7 @@
             android:layout_height="19dp"
             android:gravity="center"
             android:text="Done"
+            android:visibility="gone"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="@+id/status_img"
             app:layout_constraintTop_toBottomOf="@+id/status_img"

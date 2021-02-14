@@ -7,10 +7,9 @@ import android.view.ViewGroup;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
-
+import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
-
 import java.util.List;
 
 public class HistoryAdapter extends RecyclerView.Adapter<HistoryAdapter.ViewHolder>{
@@ -18,10 +17,14 @@ public class HistoryAdapter extends RecyclerView.Adapter<HistoryAdapter.ViewHold
 
     Context context;
     List<String> list;
+    public boolean flage=false;
+    OnClickItem onClickItem;
 
-    public HistoryAdapter(Context context, List<String> list) {
+
+    public HistoryAdapter(Context context, List<String> list,OnClickItem onClickItem) {
         this.context = context;
         this.list = list;
+        this.onClickItem=onClickItem;
     }
 
     @NonNull
@@ -37,6 +40,65 @@ public class HistoryAdapter extends RecyclerView.Adapter<HistoryAdapter.ViewHold
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
+
+
+
+        holder.nameTxt.setText(list.get(position));
+
+
+
+        holder.delete.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+
+                //Toast.makeText(context,"deleted",Toast.LENGTH_LONG).show();
+
+                onClickItem.onItemDelete(position);
+
+            }
+        });
+
+        holder.upDown.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+
+                //Toast.makeText(context,"deleted",Toast.LENGTH_LONG).show();
+
+                if(flage) {
+                    holder.upDown.setImageResource(R.drawable.down);
+                    holder.dateImag.setVisibility(View.GONE);
+                    holder.timeImag.setVisibility(View.GONE);
+                    holder.fromImag.setVisibility(View.GONE);
+                    holder.toImag.setVisibility(View.GONE);
+                    holder.statusImag.setVisibility(View.GONE);
+                    holder.fromTxt.setVisibility(View.GONE);
+                    holder.toTxt.setVisibility(View.GONE);
+                    holder.statusTxt.setVisibility(View.GONE);
+                    holder.dateTxt.setVisibility(View.GONE);
+                    holder.timeTxt.setVisibility(View.GONE);
+                }else{
+                    holder.upDown.setImageResource(R.drawable.up);
+
+                    holder.dateImag.setVisibility(View.VISIBLE);
+                    holder.timeImag.setVisibility(View.VISIBLE);
+                    holder.fromImag.setVisibility(View.VISIBLE);
+                    holder.toImag.setVisibility(View.VISIBLE);
+                    holder.statusImag.setVisibility(View.VISIBLE);
+                    holder.fromTxt.setVisibility(View.VISIBLE);
+                    holder.toTxt.setVisibility(View.VISIBLE);
+                    holder.statusTxt.setVisibility(View.VISIBLE);
+                    holder.dateTxt.setVisibility(View.VISIBLE);
+                    holder.timeTxt.setVisibility(View.VISIBLE);
+
+
+
+                }
+                flage=!flage;
+
+            }
+        });
 
     }
 
@@ -94,6 +156,11 @@ public class HistoryAdapter extends RecyclerView.Adapter<HistoryAdapter.ViewHold
 
 
 
+
+    }
+    public interface OnClickItem{
+
+        void onItemDelete(int position);
 
     }
 }
