@@ -51,8 +51,6 @@ dependencies {
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.3.0'
     implementation 'com.google.android.libraries.places:places:2.4.0'
     implementation "androidx.fragment:fragment:1.2.5"
-
-
     def room_version = "2.2.6"
 
     implementation "androidx.room:room-runtime:$room_version"
@@ -62,4 +60,7 @@ dependencies {
     def rxJavaVersion = '2.1.1'
     implementation "io.reactivex.rxjava2:rxandroid:$rxJavaVersion"
     implementation "io.reactivex.rxjava2:rxjava:$rxJavaVersion"
+
+
+
 }
