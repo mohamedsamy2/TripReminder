@@ -84,7 +84,8 @@ public class UpcomingAdapter extends RecyclerView.Adapter<UpcomingAdapter.ViewHo
                             }
                         });
 
-
+                list.remove(position);
+                notifyDataSetChanged();
             }
         });
 
