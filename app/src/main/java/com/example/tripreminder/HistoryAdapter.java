@@ -4,6 +4,7 @@ import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -51,40 +52,17 @@ public class HistoryAdapter extends RecyclerView.Adapter<HistoryAdapter.ViewHold
 
 
 
-        public ImageButton delete;
-        public ImageButton upDown;
-        public ImageView dateImag;
-        public ImageView timeImag;
-        public ImageView fromImag;
-        public ImageView toImag;
-        public ImageView nameImag;
-        public ImageView statusImag;
-        public TextView nameTxt;
-        public TextView fromTxt;
-        public TextView toTxt;
-        public TextView statusTxt;
-        public TextView dateTxt;
-        public TextView timeTxt;
-
+        Button viewNotesBtn;
+        TextView upcomingDateText, upcomingTimeText, upcomingTripName, upcomingFrom, upcomingTo, txt_status;
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
-
-
-            delete=itemView.findViewById(R.id.delete_history);
-            upDown=itemView.findViewById(R.id.up_down_history);
-            dateImag=itemView.findViewById(R.id.date_img);
-            timeImag=itemView.findViewById(R.id.time_img);
-            fromImag=itemView.findViewById(R.id.from_img);
-            toImag=itemView.findViewById(R.id.to_img);
-            nameImag=itemView.findViewById(R.id.name_img);
-            statusImag=itemView.findViewById(R.id.status_img);
-            nameTxt=itemView.findViewById(R.id.name_txt);
-            fromTxt=itemView.findViewById(R.id.from_txt);
-            toTxt=itemView.findViewById(R.id.to_txt);
-            statusTxt=itemView.findViewById(R.id.status_txt);
-            dateTxt=itemView.findViewById(R.id.date_txt);
-            timeTxt=itemView.findViewById(R.id.time_txt);
-
+            viewNotesBtn=itemView.findViewById(R.id.viewNotesBtn);
+            upcomingDateText=itemView.findViewById(R.id.upcomingDateText);
+            upcomingTimeText=itemView.findViewById(R.id.upcomingTimeText);
+            upcomingTripName=itemView.findViewById(R.id.upcomingTripName);
+            upcomingFrom=itemView.findViewById(R.id.upcomingFrom);
+            upcomingTo=itemView.findViewById(R.id.upcomingTo);
+            txt_status=itemView.findViewById(R.id.txt_status);
 
 
 
