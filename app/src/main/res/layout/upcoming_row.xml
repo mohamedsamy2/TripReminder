@@ -74,7 +74,7 @@
                 android:contentDescription="@string/note"
                 app:layout_constraintBottom_toTopOf="@+id/startTripBtn"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/img_tripEdit"
+                app:layout_constraintTop_toBottomOf="@+id/editTripBtn"
                 app:layout_constraintVertical_bias="0.49"
                 android:src="@drawable/ic_note" />
             <Button
