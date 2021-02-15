@@ -7,6 +7,8 @@ import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
 import android.content.Intent;
 import android.os.Bundle;
+import android.provider.ContactsContract;
+import android.util.Log;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
@@ -27,6 +29,7 @@ import com.google.android.libraries.places.widget.Autocomplete;
 import com.google.android.libraries.places.widget.model.AutocompleteActivityMode;
 import com.google.firebase.auth.FirebaseAuth;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -47,10 +50,13 @@ public class AddTripActivity extends AppCompatActivity implements TimePickerDial
     Spinner tripTypes;
     Button addTrip;
 
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_trip);
+
 
         initViews();
         initDropDownList();
@@ -106,6 +112,9 @@ public class AddTripActivity extends AppCompatActivity implements TimePickerDial
                 trip.setTime(timePicked.getText().toString());
                 trip.setStatus("Upcoming");
                 trip.setType(tripTypes.getSelectedItem().toString());
+                trip.setNotes(new ArrayList<>());
+
+
 
                 database.roomTripDao().insertTrip(trip).subscribeOn(Schedulers.computation())
                         .subscribe(new CompletableObserver() {
@@ -118,6 +127,7 @@ public class AddTripActivity extends AppCompatActivity implements TimePickerDial
                             public void onComplete() {
                                  Intent intent = new Intent(AddTripActivity.this,MainActivity.class);
                                  startActivity(intent);
+                                Log.i("main", ">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>onComplete: ");
                             }
 
                             @Override
@@ -138,7 +148,7 @@ public class AddTripActivity extends AppCompatActivity implements TimePickerDial
         endPoint = findViewById(R.id.endPointEditText);
         tripTypes = findViewById(R.id.tripType);
 
-        
+
         timePicked = findViewById(R.id.timePickerTextView);
         datePicked = findViewById(R.id.datePickerTextView);
         addTrip = findViewById(R.id.addTripBtn);

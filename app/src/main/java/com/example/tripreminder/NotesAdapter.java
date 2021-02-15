@@ -8,6 +8,8 @@ import android.widget.ImageButton;
 import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
+
+import java.util.ArrayList;
 import java.util.List;
 
 public class NotesAdapter extends RecyclerView.Adapter<NotesAdapter.ViewHolder>{
@@ -15,11 +17,14 @@ public class NotesAdapter extends RecyclerView.Adapter<NotesAdapter.ViewHolder>{
     List<String> list;
 
 
-
     public NotesAdapter(Context context, List<String> list) {
         this.context = context;
         this.list = list;
+    }
 
+    List<String> getList(){
+
+        return list;
     }
 
     @NonNull
@@ -37,27 +42,24 @@ public class NotesAdapter extends RecyclerView.Adapter<NotesAdapter.ViewHolder>{
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
 
 
-        //holder.txt.setText(list.get(position));
+        holder.txt.setText(list.get(position));
 
         holder.delete.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
-
+                list.remove(position);
+                notifyDataSetChanged();
+            }
+        });
+        holder.edit.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
 
 
 
             }
         });
-        /*holder.add.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
 
-
-
-
-            }
-        });*/
 
     }
 
@@ -70,23 +72,17 @@ public class NotesAdapter extends RecyclerView.Adapter<NotesAdapter.ViewHolder>{
 
 
         public ImageButton delete;
-        public ImageButton add;
+        public ImageButton edit;
         public TextView txt;
         public RecyclerView recyclerView;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
-            delete=itemView.findViewById(R.id.delete_note_btn);
-            add=itemView.findViewById(R.id.add_note_btn);
-            txt=itemView.findViewById(R.id.note_txt);
-
+            delete=itemView.findViewById(R.id.delete_note_row);
+            edit=itemView.findViewById(R.id.edit_note_row);
+            txt=itemView.findViewById(R.id.txt_note_row);
 
         }
-
-
-
-
-
     }
 
 
@@ -94,145 +90,3 @@ public class NotesAdapter extends RecyclerView.Adapter<NotesAdapter.ViewHolder>{
 }
 
 
-///////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-/*public class MyAdapter extends RecyclerView.Adapter<MyAdapter.ViewHolder> {
-    public static String TAG="main";
-    private final Context context;
-    private ArrayList<Player> players;
-
-    public MyAdapter(Context context, ArrayList<Player> players) {
-        this.context=context;
-        this.players=players;
-    }
-
-    @NonNull
-    @Override
-    public MyAdapter.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-
-        LayoutInflater inflater=LayoutInflater.from(parent.getContext());
-        View v=inflater.inflate(R.layout.row,parent,false);
-        ViewHolder viewHolder=new ViewHolder(v);
-        Log.i(TAG, "==============onCreateViewHolder==================");
-
-        return viewHolder;
-    }
-
-    @Override
-    public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
-
-        String url=players.get(position).getImgUrl();
-
-
-        holder.txtname.setText(players.get(position).getName());
-        holder.txtbrief.setText(players.get(position).getBrief());
-        holder.getImage(url);
-
-        holder.linearLayout.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-
-                Intent intent=new Intent(context,Post.class);
-                intent.putExtra("name",holder.txtname.getText().toString());
-                intent.putExtra("brief",holder.txtbrief.getText().toString());
-
-                BitmapDrawable bitmap= (BitmapDrawable) holder.img.getDrawable();
-                Bitmap bitmap1=bitmap.getBitmap();
-
-                ByteArrayOutputStream bs = new ByteArrayOutputStream();
-                bitmap1.compress(Bitmap.CompressFormat.PNG, 10, bs);
-                intent.putExtra("image",bs.toByteArray());
-
-
-
-                context.startActivity(intent);
-
-            }
-        });
-
-
-        Log.i(TAG, "==============onBindViewHolder==================");
-    }
-
-    @Override
-    public int getItemCount() {
-        return players.size();
-    }
-
-    class ViewHolder extends RecyclerView.ViewHolder{
-        Bitmap bitmap;
-
-        public TextView txtname;
-        public ImageView img;
-        public TextView txtbrief;
-        public View Layout;
-        public CardView cardView;
-        public LinearLayout linearLayout;
-
-        public Bitmap bitmap1;
-
-        public ViewHolder(@NonNull View itemView) {
-            super(itemView);
-            Layout=itemView;
-            txtname=itemView.findViewById(R.id.txtName);
-            txtbrief=itemView.findViewById(R.id.txtbrief);
-            img=itemView.findViewById(R.id.img1);
-            linearLayout=itemView.findViewById(R.id.linear);
-            cardView=itemView.findViewById(R.id.row);
-
-
-
-
-        }
-        public void getImage(String url) {
-
-            new AsyncTaskDeom().execute(url);
-
-
-        }
-
-        public class AsyncTaskDeom extends AsyncTask<String, Void, Bitmap> {
-
-            int index;
-
-            @Override
-            protected void onPreExecute() {
-
-
-            }
-
-
-            @Override
-            protected Bitmap doInBackground(String... strings) {
-                Bitmap bitmap=null;
-                try {
-
-                    bitmap=HttpHandler.download(strings[0]);
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-                return bitmap;
-            }
-
-            @Override
-            protected void onPostExecute(Bitmap bitmap) {
-
-                if(bitmap!=null) {
-                    img.setImageBitmap(bitmap);
-                }else{
-
-                    img.setImageResource(R.drawable.one);
-                }
-
-
-            }
-
-        }
-
-
-    }
-
-
-
-
-}*/

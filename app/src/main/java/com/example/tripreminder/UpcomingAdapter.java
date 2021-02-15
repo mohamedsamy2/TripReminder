@@ -1,6 +1,7 @@
 package com.example.tripreminder;
 
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.Uri;
 import android.util.Log;
@@ -12,6 +13,7 @@ import android.widget.ImageButton;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -67,30 +69,53 @@ public class UpcomingAdapter extends RecyclerView.Adapter<UpcomingAdapter.ViewHo
         holder.cancelTripBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                database = RoomDatabase.getInstance(holder.itemView.getContext());
-                database.roomTripDao().deleteTrip(list.get(position)).subscribeOn(Schedulers.computation())
-                        .subscribe(new CompletableObserver() {
-                            @Override
-                            public void onSubscribe(@io.reactivex.annotations.NonNull Disposable d) {
+
+                AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(context);
+                alertDialogBuilder.setTitle("warning");
+                alertDialogBuilder
+                        .setMessage("are you sure?")
+                        .setCancelable(false)
+                        .setPositiveButton("Yes",new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog,int id) {
+
+                                database = RoomDatabase.getInstance(holder.itemView.getContext());
+                                database.roomTripDao().deleteTrip(list.get(position)).subscribeOn(Schedulers.computation())
+                                        .subscribe(new CompletableObserver() {
+                                            @Override
+                                            public void onSubscribe(@io.reactivex.annotations.NonNull Disposable d) {
+
+                                            }
+
+                                            @Override
+                                            public void onComplete() {
+
+                                            }
+
+                                            @Override
+                                            public void onError(@io.reactivex.annotations.NonNull Throwable e) {
+
+                                            }
+                                        });
+
+                                list.remove(position);
+                                notifyDataSetChanged();
 
                             }
+                        })
+                        .setNegativeButton("No",new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog,int id) {
 
-                            @Override
-                            public void onComplete() {
-
-                            }
-
-                            @Override
-                            public void onError(@io.reactivex.annotations.NonNull Throwable e) {
-
+                                dialog.cancel();
                             }
                         });
 
-                list.remove(position);
-                notifyDataSetChanged();
+                AlertDialog alertDialog = alertDialogBuilder.create();
+                alertDialog.show();
+
             }
         });
-        holder.addNotesBtn.setOnClickListener(new View.OnClickListener() {
+
+        holder.addNotes.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent  intent=new Intent(holder.itemView.getContext(),AddNotesActivity.class);
@@ -121,11 +146,10 @@ public class UpcomingAdapter extends RecyclerView.Adapter<UpcomingAdapter.ViewHo
         public Button startTripBtn;
         public ConstraintLayout constraintLayout;
         public View layout;
-        public ImageButton addNotesBtn;
+        public ImageButton addNotes;
 
 
-        public ViewHolder(View v)
-        {
+        public ViewHolder(View v) {
             super(v);
             fromText = v.findViewById(R.id.upcomingFrom);
             toText = v.findViewById(R.id.upcomingTo);
@@ -135,9 +159,9 @@ public class UpcomingAdapter extends RecyclerView.Adapter<UpcomingAdapter.ViewHo
             cancelTripBtn = v.findViewById(R.id.cancelTripBtn);
             startTripBtn = v.findViewById(R.id.startTripBtn);
             constraintLayout = v.findViewById(R.id.upcomingRow);
+            addNotes=v.findViewById(R.id.add_notes);
 
-            addNotesBtn=v.findViewById(R.id.add_note_btn);
-            Log.i(TAG, "ViewHolder: ");
+
         }
 
     }
@@ -153,3 +177,10 @@ public class UpcomingAdapter extends RecyclerView.Adapter<UpcomingAdapter.ViewHo
         this.list = list;
     }
 }
+
+
+
+
+
+
+

@@ -15,6 +15,12 @@ public class Trip {
     String source;
     public List<String> notes;
 
+    public int getTripID() {
+        return tripID;
+    }
+
+
+
     public List<String> getNotes() {
         return notes;
     }

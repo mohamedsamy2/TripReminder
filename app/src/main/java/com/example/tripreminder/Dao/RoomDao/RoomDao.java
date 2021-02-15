@@ -4,6 +4,7 @@ import androidx.room.Dao;
 import androidx.room.Delete;
 import androidx.room.Insert;
 import androidx.room.Query;
+import androidx.room.Update;
 
 import com.example.tripreminder.model.Trip;
 
@@ -23,4 +24,8 @@ public interface RoomDao {
 
     @Delete
     Completable deleteTrip(Trip trip);
+
+    @Query("UPDATE trips_table SET notes=:notes WHERE tripID = :id")
+    Completable update(String notes, int id);
+
 }

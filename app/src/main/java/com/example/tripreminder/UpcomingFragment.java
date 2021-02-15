@@ -51,6 +51,8 @@ public class UpcomingFragment extends Fragment {
             @Override
             public void onSubscribe(@io.reactivex.annotations.NonNull Disposable d) {
 
+                Log.i(TAG, "onSubscribe: "+FirebaseAuth.getInstance().getUid());
+
             }
 
             @Override
@@ -58,10 +60,13 @@ public class UpcomingFragment extends Fragment {
 
                 upcomingAdapter.setList(trips);
                 upcomingAdapter.notifyDataSetChanged();
+                Log.i(TAG, "onSuccess: ");
             }
 
             @Override
             public void onError(@io.reactivex.annotations.NonNull Throwable e) {
+
+                Log.i(TAG, "onError: ");
 
             }
         });
@@ -89,7 +94,7 @@ public class UpcomingFragment extends Fragment {
         recyclerView.setAdapter(upcomingAdapter);
 
 
-        Log.i(TAG, "onViewCreated: DONE");
+
 
 
     }
