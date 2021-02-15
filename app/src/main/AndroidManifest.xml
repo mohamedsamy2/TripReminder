@@ -3,6 +3,7 @@
     package="com.example.tripreminder">
 
     <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW" />
 
     <application
         android:allowBackup="true"
@@ -11,13 +12,15 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.TripReminder">
+        <service
+            android:name=".services.FloatingViewService"
+            android:enabled="true"
+            android:exported="true"></service>
 
-        <activity android:name=".AddNotesActivity"></activity>
-        <activity android:name=".RegisterActivity"></activity>
+        <activity android:name=".AddNotesActivity" />
+        <activity android:name=".RegisterActivity" />
         <activity android:name=".LoginActivity" />
-
         <activity android:name=".AddTripActivity" />
-
         <activity android:name=".MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

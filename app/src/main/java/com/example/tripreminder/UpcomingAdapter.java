@@ -1,9 +1,8 @@
 package com.example.tripreminder;
 
+
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
-import android.net.Uri;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -11,22 +10,14 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.TextView;
-
 import androidx.annotation.NonNull;
-import androidx.appcompat.app.AlertDialog;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.recyclerview.widget.RecyclerView;
-
 import com.example.tripreminder.Database.Room.RoomDatabase;
 import com.example.tripreminder.model.Trip;
 import com.google.gson.Gson;
-
-import java.io.Serializable;
 import java.util.List;
 
-import io.reactivex.CompletableObserver;
-import io.reactivex.disposables.Disposable;
-import io.reactivex.schedulers.Schedulers;
 
 public class UpcomingAdapter extends RecyclerView.Adapter<UpcomingAdapter.ViewHolder>{
     private static final String TAG = "UpcomingAdapter";
@@ -34,6 +25,12 @@ public class UpcomingAdapter extends RecyclerView.Adapter<UpcomingAdapter.ViewHo
     Context context;
     List<Trip> list;
     RoomDatabase database;
+
+    OnItemClickLisener onItemClickLisener;
+
+    public void setOnItemClickLisener(OnItemClickLisener onItemClickLisener) {
+        this.onItemClickLisener = onItemClickLisener;
+    }
 
     @NonNull
     @Override
@@ -56,11 +53,7 @@ public class UpcomingAdapter extends RecyclerView.Adapter<UpcomingAdapter.ViewHo
         holder.startTripBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
-                        Uri gmmIntentUri = Uri.parse("http://maps.google.com/maps?daddr="+holder.toText.getText().toString().replace(" ","+"));
-                        Intent mapIntent = new Intent(Intent.ACTION_VIEW, gmmIntentUri);
-                        mapIntent.setPackage("com.google.android.apps.maps");
-                        context.startActivity(mapIntent);
+                onItemClickLisener.onStartClickLisener(position,holder.toText.getText().toString().replace(" ","+"));
 
             }
         });
@@ -70,48 +63,7 @@ public class UpcomingAdapter extends RecyclerView.Adapter<UpcomingAdapter.ViewHo
             @Override
             public void onClick(View v) {
 
-                AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(context);
-                alertDialogBuilder.setTitle("warning");
-                alertDialogBuilder
-                        .setMessage("are you sure?")
-                        .setCancelable(false)
-                        .setPositiveButton("Yes",new DialogInterface.OnClickListener() {
-                            public void onClick(DialogInterface dialog,int id) {
-
-                                database = RoomDatabase.getInstance(holder.itemView.getContext());
-                                database.roomTripDao().deleteTrip(list.get(position)).subscribeOn(Schedulers.computation())
-                                        .subscribe(new CompletableObserver() {
-                                            @Override
-                                            public void onSubscribe(@io.reactivex.annotations.NonNull Disposable d) {
-
-                                            }
-
-                                            @Override
-                                            public void onComplete() {
-
-                                            }
-
-                                            @Override
-                                            public void onError(@io.reactivex.annotations.NonNull Throwable e) {
-
-                                            }
-                                        });
-
-                                list.remove(position);
-                                notifyDataSetChanged();
-
-                            }
-                        })
-                        .setNegativeButton("No",new DialogInterface.OnClickListener() {
-                            public void onClick(DialogInterface dialog,int id) {
-
-                                dialog.cancel();
-                            }
-                        });
-
-                AlertDialog alertDialog = alertDialogBuilder.create();
-                alertDialog.show();
-
+                onItemClickLisener.onCancleClickLisener(list.get(position));
             }
         });
 
@@ -135,6 +87,11 @@ public class UpcomingAdapter extends RecyclerView.Adapter<UpcomingAdapter.ViewHo
         return list.size();
     }
 
+    public interface OnItemClickLisener{
+        void onCancleClickLisener(Trip trip);
+        void onStartClickLisener(int positon, String to);
+    }
+
 
     public class ViewHolder extends RecyclerView.ViewHolder{
         public TextView fromText;
@@ -142,11 +99,11 @@ public class UpcomingAdapter extends RecyclerView.Adapter<UpcomingAdapter.ViewHo
         public TextView timeText;
         public TextView dateText;
         public TextView tripNameTxt;
-        public ImageButton cancelTripBtn;
-        public Button startTripBtn;
+        public ImageButton cancelTripBtn, editTripBtn, viewNoteBtn;
+        public Button startTripBtn, addNoteBtn;
         public ConstraintLayout constraintLayout;
         public View layout;
-        public ImageButton addNotes;
+        public Button addNotes;
 
 
         public ViewHolder(View v) {
@@ -158,8 +115,11 @@ public class UpcomingAdapter extends RecyclerView.Adapter<UpcomingAdapter.ViewHo
             tripNameTxt = v.findViewById(R.id.upcomingTripName);
             cancelTripBtn = v.findViewById(R.id.cancelTripBtn);
             startTripBtn = v.findViewById(R.id.startTripBtn);
+            editTripBtn=v.findViewById(R.id.editTripBtn);
+            viewNoteBtn=v.findViewById(R.id.viewNoteBtn);
+            addNoteBtn=v.findViewById(R.id.addNotesBtn);
             constraintLayout = v.findViewById(R.id.upcomingRow);
-            addNotes=v.findViewById(R.id.add_notes);
+            addNotes=v.findViewById(R.id.addNotesBtn);
 
 
         }
