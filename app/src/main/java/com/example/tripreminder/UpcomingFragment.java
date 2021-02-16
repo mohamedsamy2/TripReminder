@@ -59,7 +59,7 @@ public class UpcomingFragment extends Fragment implements UpcomingAdapter.OnItem
     @Override
     public void onResume() {
         super.onResume();
-        database.roomTripDao().getTripsByUser(FirebaseAuth.getInstance().getUid()).subscribeOn(Schedulers.computation())
+        database.roomTripDao().getUpcomingTripsByUser(FirebaseAuth.getInstance().getUid()).subscribeOn(Schedulers.computation())
                 .observeOn(AndroidSchedulers.mainThread()).subscribe(new SingleObserver<List<Trip>>() {
             @Override
             public void onSubscribe(@io.reactivex.annotations.NonNull Disposable d) {
@@ -70,7 +70,7 @@ public class UpcomingFragment extends Fragment implements UpcomingAdapter.OnItem
 
             @Override
             public void onSuccess(@io.reactivex.annotations.NonNull List<Trip> trips) {
-
+                upcomingList = trips;
                 upcomingAdapter.setList(trips);
                 upcomingAdapter.notifyDataSetChanged();
                 Log.i(TAG, "onSuccess: ");
@@ -115,7 +115,8 @@ public class UpcomingFragment extends Fragment implements UpcomingAdapter.OnItem
     }
 
     @Override
-    public void onStartClickLisener(int positon, String to) {
+    public void onStartClickLisener(int position, String to) {
+        setDoneStatus(upcomingList.get(position).getTripID());
         Uri gmmIntentUri = Uri.parse("http://maps.google.com/maps?daddr="+to);
         Intent mapIntent = new Intent(Intent.ACTION_VIEW, gmmIntentUri);
         mapIntent.setPackage("com.google.android.apps.maps");
@@ -161,7 +162,7 @@ public class UpcomingFragment extends Fragment implements UpcomingAdapter.OnItem
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 database = RoomDatabase.getInstance(getContext());
-                database.roomTripDao().deleteTrip(trip).subscribeOn(Schedulers.computation())
+                database.roomTripDao().tripCancelled(trip.getTripID()).subscribeOn(Schedulers.computation())
                         .subscribe(new CompletableObserver() {
                             @Override
                             public void onSubscribe(@io.reactivex.annotations.NonNull Disposable d) {
@@ -178,8 +179,8 @@ public class UpcomingFragment extends Fragment implements UpcomingAdapter.OnItem
 
                             }
                         });
-
-                upcomingList.remove(trip);
+                trip.setStatus("Cancelled");
+                upcomingAdapter.setList(upcomingList); //doesn't update recyclerview
                 upcomingAdapter.notifyDataSetChanged();
             }
         });
@@ -197,5 +198,26 @@ public class UpcomingFragment extends Fragment implements UpcomingAdapter.OnItem
 
     }
 
+
+    public void setDoneStatus(int tripID) {
+        database = RoomDatabase.getInstance(getContext());
+        database.roomTripDao().tripStarted(tripID).subscribeOn(Schedulers.computation())
+                .subscribe(new CompletableObserver() {
+                    @Override
+                    public void onSubscribe(@io.reactivex.annotations.NonNull Disposable d) {
+
+                    }
+
+                    @Override
+                    public void onComplete() {
+
+                    }
+
+                    @Override
+                    public void onError(@io.reactivex.annotations.NonNull Throwable e) {
+
+                    }
+                });
+    }
 
 }

@@ -18,6 +18,10 @@ import com.example.tripreminder.model.Trip;
 import com.google.gson.Gson;
 import java.util.List;
 
+import io.reactivex.CompletableObserver;
+import io.reactivex.disposables.Disposable;
+import io.reactivex.schedulers.Schedulers;
+
 
 public class UpcomingAdapter extends RecyclerView.Adapter<UpcomingAdapter.ViewHolder>{
     private static final String TAG = "UpcomingAdapter";
@@ -53,8 +57,8 @@ public class UpcomingAdapter extends RecyclerView.Adapter<UpcomingAdapter.ViewHo
         holder.startTripBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                onItemClickLisener.onStartClickLisener(position,holder.toText.getText().toString().replace(" ","+"));
 
+                onItemClickLisener.onStartClickLisener(position,holder.toText.getText().toString().replace(" ","+"));
             }
         });
 
@@ -136,10 +140,9 @@ public class UpcomingAdapter extends RecyclerView.Adapter<UpcomingAdapter.ViewHo
     public void setList(List<Trip> list) {
         this.list = list;
     }
+
+
 }
-
-
-
 
 
 
