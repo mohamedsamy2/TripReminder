@@ -163,7 +163,7 @@ public class UpcomingFragment extends Fragment implements UpcomingAdapter.OnItem
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 database = RoomDatabase.getInstance(getContext());
-                database.roomTripDao().tripCancelled(trip.getTripID()).subscribeOn(Schedulers.computation())
+                database.roomTripDao().deleteTrip(trip).subscribeOn(Schedulers.computation())
                         .subscribe(new CompletableObserver() {
                             @Override
                             public void onSubscribe(@io.reactivex.annotations.NonNull Disposable d) {

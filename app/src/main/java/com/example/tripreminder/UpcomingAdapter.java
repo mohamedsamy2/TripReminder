@@ -81,6 +81,16 @@ public class UpcomingAdapter extends RecyclerView.Adapter<UpcomingAdapter.ViewHo
             }
         });
 
+        holder.editTripBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Trip trip = list.get(position);
+                Intent intent = new Intent(holder.itemView.getContext(), EditTripActivity.class);
+                intent.putExtra("trip", trip);
+                holder.itemView.getContext().startActivity(intent);
+
+            }
+        });
 
 
         Log.i(TAG, "onBindViewHolder: ");
