@@ -19,8 +19,12 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.example.tripreminder.Dao.firebaseDao.FirebaseTripsDao;
 import com.example.tripreminder.Dao.firebaseDao.FirebaseUserDao;
+import com.example.tripreminder.Database.Room.RoomDatabase;
 import com.example.tripreminder.Database.firebase.DataHolder;
+import com.example.tripreminder.model.FirebaseTrip;
+import com.example.tripreminder.model.Trip;
 import com.example.tripreminder.model.User;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
@@ -38,8 +42,15 @@ import com.google.firebase.auth.GoogleAuthProvider;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.ValueEventListener;
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 
 import java.util.ArrayList;
+import java.util.List;
+
+import io.reactivex.CompletableObserver;
+import io.reactivex.disposables.Disposable;
+import io.reactivex.schedulers.Schedulers;
 
 public class LoginActivity extends AppCompatActivity {
 
@@ -52,6 +63,7 @@ public class LoginActivity extends AppCompatActivity {
     private GoogleSignInClient googleSignInClient;
     private int SIGN_IN_CODE=1;
     String uName,uEmail;
+    List<Trip> tripList;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -104,6 +116,7 @@ public class LoginActivity extends AppCompatActivity {
                                 DataHolder.dataBaseUser=databaseUser;
                                 DataHolder.authUser=mAuth.getCurrentUser();
                                 saveDataInSharedPerefrence();
+                                syncData();
                                 sendToMainActivity();
                                 Toast.makeText(LoginActivity.this,""+ R.string.logged_is_successful, Toast.LENGTH_SHORT).show();
                                 loadingBar.dismiss();
@@ -204,15 +217,58 @@ public class LoginActivity extends AppCompatActivity {
         user.setId(currentUserId);
         user.setEmail(uEmail);
         user.setUserName(uName);
-        FirebaseUserDao.addUser(user, currentUserId, new OnCompleteListener<Void>() {
+        FirebaseUserDao.getUser(currentUserId, new ValueEventListener() {
             @Override
-            public void onComplete(@NonNull Task<Void> task) {
-                if (task.isSuccessful()){
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                final User databaseUser=(User) snapshot.getValue(User.class);
+                if (databaseUser!=null) {
+                    uName = databaseUser.getUserName();
+                    uEmail = databaseUser.getEmail();
+                    DataHolder.dataBaseUser = databaseUser;
+                    DataHolder.authUser = mAuth.getCurrentUser();
+                    saveDataInSharedPerefrence();
+                    syncData();
+                    sendToMainActivity();
+                    Toast.makeText(LoginActivity.this, "" + R.string.logged_is_successful, Toast.LENGTH_SHORT).show();
+                    loadingBar.dismiss();
+                }else{
+                    FirebaseUserDao.addUser(user, currentUserId, new OnCompleteListener<Void>() {
+                        @Override
+                        public void onComplete(@NonNull Task<Void> task) {
+                            if (task.isSuccessful()){
+                                DataHolder.dataBaseUser=user;
+                                DataHolder.authUser=mAuth.getCurrentUser();
+                                uName=user.getUserName();
+                                uEmail=user.getEmail();
+                                saveDataInSharedPerefrence();
+                                //syncData();
+                                sendToMainActivity();
+                                Toast.makeText(LoginActivity.this, ""+R.string.account_created_successfully, Toast.LENGTH_SHORT).show();
+                                loadingBar.dismiss();
+                            }else{
+                                String message = task.getException().toString();
+                                Toast.makeText(LoginActivity.this, ""+R.string.error + message, Toast.LENGTH_SHORT).show();
+                                loadingBar.dismiss();
+                            }
+                        }
+                    });
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+                String message = error.toException().getLocalizedMessage();
+                Toast.makeText(LoginActivity.this, ""+R.string.error + message, Toast.LENGTH_SHORT).show();
+                loadingBar.dismiss();
+            }
+        });
+        /*      if (task.isSuccessful()){
                     DataHolder.dataBaseUser=user;
                     DataHolder.authUser=mAuth.getCurrentUser();
                     uName=user.getUserName();
                     uEmail=user.getEmail();
                     saveDataInSharedPerefrence();
+                    syncData();
                     sendToMainActivity();
                     Toast.makeText(LoginActivity.this, ""+R.string.account_created_successfully, Toast.LENGTH_SHORT).show();
                     loadingBar.dismiss();
@@ -222,7 +278,7 @@ public class LoginActivity extends AppCompatActivity {
                     loadingBar.dismiss();
                 }
             }
-        });
+        });*/
     }
 
     private void initiatizeFields() {
@@ -250,5 +306,50 @@ public class LoginActivity extends AppCompatActivity {
         editor.putString("Name",uName);
         editor.putString("Email",uEmail);
         editor.apply();
+    }
+    private void syncData() {
+        String currentUserId=mAuth.getCurrentUser().getUid();
+        FirebaseTripsDao.getUserTrips(currentUserId, new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                tripList=new ArrayList<>();
+                for (DataSnapshot dataSnapshot:snapshot.getChildren()){
+                    FirebaseTrip trip =dataSnapshot.getValue(FirebaseTrip.class);
+                    Log.e("login",trip.getTripName());
+                    tripList.add(new Trip(trip.getTripName(),trip.getUserID(),trip.getSource(),trip.getDestination(),trip.getDate(),
+                            trip.getTime(),trip.getStatus(),trip.getType(),new Gson().fromJson(trip.getNotes(),
+                            new TypeToken<ArrayList<String>>() {}.getType())));
+                }
+                saveFromFirebaseToRoom(tripList);
+
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
+    }
+
+    private void saveFromFirebaseToRoom(List<Trip> tripList) {
+        for (Trip trip:tripList){
+            RoomDatabase.getInstance(LoginActivity.this).roomTripDao()
+                    .insertTrip(trip).subscribeOn(Schedulers.computation())
+                    .subscribe(new CompletableObserver() {
+                        @Override
+                        public void onSubscribe(@io.reactivex.annotations.NonNull Disposable d) {
+                        }
+
+                        @Override
+                        public void onComplete() {
+                            Log.e("login",trip.getTripName());
+                        }
+
+                        @Override
+                        public void onError(@io.reactivex.annotations.NonNull Throwable e) {
+
+                        }
+                    });
+        }
     }
 }

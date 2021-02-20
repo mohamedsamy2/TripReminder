@@ -27,6 +27,7 @@ import com.example.tripreminder.Database.Room.RoomDatabase;
 import com.example.tripreminder.services.FloatingViewService;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.gson.Gson;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -121,15 +122,15 @@ public class UpcomingFragment extends Fragment implements UpcomingAdapter.OnItem
         Intent mapIntent = new Intent(Intent.ACTION_VIEW, gmmIntentUri);
         mapIntent.setPackage("com.google.android.apps.maps");
         startActivity(mapIntent);
-        startFloatingViewService();
+        startFloatingViewService(new Gson().toJson(upcomingList.get(position).getNotes()));
 
     }
 
-    private void startFloatingViewService() {
+    private void startFloatingViewService(String notes) {
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.M) {
-            getContext().startService(new Intent(getContext(), FloatingViewService.class));
+            getContext().startService(new Intent(getContext(), FloatingViewService.class).putExtra("notes",notes));
         } else if (Settings.canDrawOverlays(getContext())) {
-            getContext().startService(new Intent(getContext(), FloatingViewService.class));
+            getContext().startService(new Intent(getContext(), FloatingViewService.class).putExtra("notes",notes));
             //finish();
         } else {
             askPermission();
@@ -179,8 +180,9 @@ public class UpcomingFragment extends Fragment implements UpcomingAdapter.OnItem
 
                             }
                         });
-                trip.setStatus("Cancelled");
-                upcomingAdapter.setList(upcomingList); //doesn't update recyclerview
+                //trip.setStatus("Cancelled");
+                //upcomingAdapter.setList(upcomingList); //doesn't update recyclerview
+                upcomingList.remove(trip);
                 upcomingAdapter.notifyDataSetChanged();
             }
         });
