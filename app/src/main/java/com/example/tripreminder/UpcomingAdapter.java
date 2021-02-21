@@ -18,6 +18,10 @@ import com.example.tripreminder.model.Trip;
 import com.google.gson.Gson;
 import java.util.List;
 
+import io.reactivex.CompletableObserver;
+import io.reactivex.disposables.Disposable;
+import io.reactivex.schedulers.Schedulers;
+
 
 public class UpcomingAdapter extends RecyclerView.Adapter<UpcomingAdapter.ViewHolder>{
     private static final String TAG = "UpcomingAdapter";
@@ -53,8 +57,8 @@ public class UpcomingAdapter extends RecyclerView.Adapter<UpcomingAdapter.ViewHo
         holder.startTripBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                onItemClickLisener.onStartClickLisener(position,holder.toText.getText().toString().replace(" ","+"));
 
+                onItemClickLisener.onStartClickLisener(position,holder.toText.getText().toString().replace(" ","+"));
             }
         });
 
@@ -77,6 +81,16 @@ public class UpcomingAdapter extends RecyclerView.Adapter<UpcomingAdapter.ViewHo
             }
         });
 
+        holder.editTripBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Trip trip = list.get(position);
+                Intent intent = new Intent(holder.itemView.getContext(), EditTripActivity.class);
+                intent.putExtra("trip", trip);
+                holder.itemView.getContext().startActivity(intent);
+
+            }
+        });
 
 
         Log.i(TAG, "onBindViewHolder: ");
@@ -136,10 +150,9 @@ public class UpcomingAdapter extends RecyclerView.Adapter<UpcomingAdapter.ViewHo
     public void setList(List<Trip> list) {
         this.list = list;
     }
+
+
 }
-
-
-
 
 
 

@@ -27,6 +27,7 @@ import com.example.tripreminder.Database.Room.RoomDatabase;
 import com.example.tripreminder.services.FloatingViewService;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.gson.Gson;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -59,7 +60,7 @@ public class UpcomingFragment extends Fragment implements UpcomingAdapter.OnItem
     @Override
     public void onResume() {
         super.onResume();
-        database.roomTripDao().getTripsByUser(FirebaseAuth.getInstance().getUid()).subscribeOn(Schedulers.computation())
+        database.roomTripDao().getUpcomingTripsByUser(FirebaseAuth.getInstance().getUid()).subscribeOn(Schedulers.computation())
                 .observeOn(AndroidSchedulers.mainThread()).subscribe(new SingleObserver<List<Trip>>() {
             @Override
             public void onSubscribe(@io.reactivex.annotations.NonNull Disposable d) {
@@ -70,7 +71,7 @@ public class UpcomingFragment extends Fragment implements UpcomingAdapter.OnItem
 
             @Override
             public void onSuccess(@io.reactivex.annotations.NonNull List<Trip> trips) {
-
+                upcomingList = trips;
                 upcomingAdapter.setList(trips);
                 upcomingAdapter.notifyDataSetChanged();
                 Log.i(TAG, "onSuccess: ");
@@ -115,20 +116,21 @@ public class UpcomingFragment extends Fragment implements UpcomingAdapter.OnItem
     }
 
     @Override
-    public void onStartClickLisener(int positon, String to) {
+    public void onStartClickLisener(int position, String to) {
+        setDoneStatus(upcomingList.get(position).getTripID());
         Uri gmmIntentUri = Uri.parse("http://maps.google.com/maps?daddr="+to);
         Intent mapIntent = new Intent(Intent.ACTION_VIEW, gmmIntentUri);
         mapIntent.setPackage("com.google.android.apps.maps");
         startActivity(mapIntent);
-        startFloatingViewService();
+        startFloatingViewService(new Gson().toJson(upcomingList.get(position).getNotes()));
 
     }
 
-    private void startFloatingViewService() {
+    private void startFloatingViewService(String notes) {
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.M) {
-            getContext().startService(new Intent(getContext(), FloatingViewService.class));
+            getContext().startService(new Intent(getContext(), FloatingViewService.class).putExtra("notes",notes));
         } else if (Settings.canDrawOverlays(getContext())) {
-            getContext().startService(new Intent(getContext(), FloatingViewService.class));
+            getContext().startService(new Intent(getContext(), FloatingViewService.class).putExtra("notes",notes));
             //finish();
         } else {
             askPermission();
@@ -176,7 +178,8 @@ public class UpcomingFragment extends Fragment implements UpcomingAdapter.OnItem
 
                             }
                         });
-
+                //trip.setStatus("Cancelled");
+                //upcomingAdapter.setList(upcomingList); //doesn't update recyclerview
                 upcomingList.remove(trip);
                 upcomingAdapter.notifyDataSetChanged();
             }
@@ -195,5 +198,26 @@ public class UpcomingFragment extends Fragment implements UpcomingAdapter.OnItem
 
     }
 
+
+    public void setDoneStatus(int tripID) {
+        database = RoomDatabase.getInstance(getContext());
+        database.roomTripDao().tripStarted(tripID).subscribeOn(Schedulers.computation())
+                .subscribe(new CompletableObserver() {
+                    @Override
+                    public void onSubscribe(@io.reactivex.annotations.NonNull Disposable d) {
+
+                    }
+
+                    @Override
+                    public void onComplete() {
+
+                    }
+
+                    @Override
+                    public void onError(@io.reactivex.annotations.NonNull Throwable e) {
+
+                    }
+                });
+    }
 
 }

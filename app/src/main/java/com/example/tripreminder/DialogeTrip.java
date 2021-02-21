@@ -34,6 +34,7 @@ public class DialogeTrip extends AppCompatActivity {
     Ringtone ringtone;
     Trip trip;
     RoomDatabase database;
+    private static final int SYSTEM_ALERT_WINDOW_PERMISSION = 2084;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -60,10 +61,7 @@ public class DialogeTrip extends AppCompatActivity {
                     public void onClick(DialogInterface dialog, int which) {
 
                         ringtone.stop();
-
-
-
-                        database.roomTripDao(). updateStatus("done",trip.getTripID()).subscribeOn(Schedulers.computation())
+                        database.roomTripDao().tripStarted(trip.getTripID()).subscribeOn(Schedulers.computation())
                                 .subscribe(new CompletableObserver() {
                                     @Override
                                     public void onSubscribe(@NonNull Disposable d) {
@@ -84,6 +82,7 @@ public class DialogeTrip extends AppCompatActivity {
                         Intent mapIntent = new Intent(Intent.ACTION_VIEW, gmmIntentUri);
                         mapIntent.setPackage("com.google.android.apps.maps");
                         startActivity(mapIntent);
+                        startFloatingViewService();
 
 
                     }
@@ -93,7 +92,7 @@ public class DialogeTrip extends AppCompatActivity {
                     public void onClick(DialogInterface dialog, int which) {
                         ringtone.stop();
 
-                        database.roomTripDao(). updateStatus("cancled",trip.getTripID()).subscribeOn(Schedulers.computation())
+                        database.roomTripDao().tripCancelled(trip.getTripID()).subscribeOn(Schedulers.computation())
                                 .subscribe(new CompletableObserver() {
                                     @Override
                                     public void onSubscribe(@NonNull Disposable d) {
@@ -110,23 +109,15 @@ public class DialogeTrip extends AppCompatActivity {
                                     }
                                 });
 
-
-
-
                     }
                 });
 
         final AlertDialog dialog = builder.create();
         dialog.show();
 
-
-
     }
 
-
-
-
-   /* private void startFloatingViewService() {
+   private void startFloatingViewService() {
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.M) {
             this.startService(new Intent(this, FloatingViewService.class));
         } else if (Settings.canDrawOverlays(this)) {
@@ -142,5 +133,5 @@ public class DialogeTrip extends AppCompatActivity {
                 Uri.parse("package:" + getPackageName()));
 
         startActivityForResult(intent,SYSTEM_ALERT_WINDOW_PERMISSION);
-    }*/
+    }
 }

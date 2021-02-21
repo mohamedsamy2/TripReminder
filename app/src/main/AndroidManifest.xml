@@ -14,6 +14,7 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.TripReminder">
+
         <activity android:name=".DialogeTrip"
             android:excludeFromRecents="false"
             android:launchMode="singleTask"
@@ -24,6 +25,9 @@
             android:name=".reciever.AlarmReciever"
             android:enabled="true"
             android:exported="true" />
+
+        <activity android:name=".EditTripActivity"></activity>
+
 
         <service
             android:name=".services.FloatingViewService"

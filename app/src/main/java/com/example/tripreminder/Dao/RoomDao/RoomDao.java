@@ -19,8 +19,11 @@ public interface RoomDao {
     @Insert
     Completable insertTrip(Trip trip);
 
-    @Query("SELECT * FROM trips_table WHERE userID = :id")
-    Single<List<Trip>> getTripsByUser(String id);
+    @Query("SELECT * FROM trips_table WHERE userID = :id AND status = 'Upcoming'")
+    Single<List<Trip>> getUpcomingTripsByUser(String id);
+
+    @Query("SELECT * FROM trips_table WHERE userID = :id AND (status = 'Done' or status = 'Cancelled')")
+    Single<List<Trip>> getPastTripsByUser(String id);
 
     @Delete
     Completable deleteTrip(Trip trip);
@@ -28,8 +31,19 @@ public interface RoomDao {
     @Query("UPDATE trips_table SET notes=:notes WHERE tripID = :id")
     Completable update(String notes, int id);
 
-    @Query("UPDATE trips_table SET status=:status WHERE tripID = :id")
-    Completable updateStatus(String status, int id);
+    @Query("UPDATE trips_table SET status='Done' WHERE tripID = :id")
+    Completable tripStarted(int id);
 
+    @Query("UPDATE trips_table SET status='Cancelled' WHERE tripID = :id")
+    Completable tripCancelled(int id);
+
+    @Query("SELECT * FROM trips_table WHERE userID = :id")
+    Single<List<Trip>> getTripsByUser(String id);
+
+    @Query("DELETE FROM trips_table")
+    Completable deleteAllRecords();
+
+    @Update
+    Completable EditTrip(Trip trip);
 
 }

@@ -8,8 +8,12 @@ import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.WindowManager;
+import android.widget.ArrayAdapter;
+import android.widget.ListView;
+import android.widget.TextView;
 
 import com.example.tripreminder.R;
+import com.google.gson.Gson;
 
 public class FloatingViewService extends Service implements View.OnClickListener{
 
@@ -17,6 +21,9 @@ public class FloatingViewService extends Service implements View.OnClickListener
     private View mFloatingView;
     private View collapsedView;
     private View expandedView;
+    ListView listView;
+    String[] listItem;
+    TextView textView;
 
     public FloatingViewService() {
     }
@@ -50,6 +57,8 @@ public class FloatingViewService extends Service implements View.OnClickListener
         collapsedView = mFloatingView.findViewById(R.id.layoutCollapsed);
         expandedView = mFloatingView.findViewById(R.id.layoutExpanded);
 
+        listView=mFloatingView.findViewById(R.id.listView);
+        textView=mFloatingView.findViewById(R.id.textView);
         //adding click listener to close button and expanded view
         mFloatingView.findViewById(R.id.buttonClose).setOnClickListener(this);
         expandedView.setOnClickListener(this);
@@ -112,6 +121,15 @@ public class FloatingViewService extends Service implements View.OnClickListener
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
+        String notes=intent.getStringExtra("notes");
+        if (notes==null || notes.equals("")){
+            listItem=new String[]{"No Notes"};
+        }else{
+            listItem=new Gson().fromJson(notes,String[].class);
+        }
+        final ArrayAdapter<String> adapter = new ArrayAdapter<String>(this,
+                android.R.layout.simple_list_item_1, android.R.id.text1, listItem);
+        listView.setAdapter(adapter);
         return super.onStartCommand(intent, flags, startId);
     }
 }
