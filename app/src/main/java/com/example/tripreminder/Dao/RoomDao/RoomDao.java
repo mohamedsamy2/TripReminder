@@ -28,4 +28,8 @@ public interface RoomDao {
     @Query("UPDATE trips_table SET notes=:notes WHERE tripID = :id")
     Completable update(String notes, int id);
 
+    @Query("UPDATE trips_table SET status=:status WHERE tripID = :id")
+    Completable updateStatus(String status, int id);
+
+
 }

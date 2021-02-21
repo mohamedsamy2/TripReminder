@@ -167,12 +167,10 @@ public class UpcomingFragment extends Fragment implements UpcomingAdapter.OnItem
                             public void onSubscribe(@io.reactivex.annotations.NonNull Disposable d) {
 
                             }
-
                             @Override
                             public void onComplete() {
 
                             }
-
                             @Override
                             public void onError(@io.reactivex.annotations.NonNull Throwable e) {
 
