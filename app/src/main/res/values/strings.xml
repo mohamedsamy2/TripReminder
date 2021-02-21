@@ -63,9 +63,12 @@
     <string name="sync_success">Data sync successfully</string>
     <string name="sync_faild">Data sync is unsuccessfully</string>
     <string name="sync_data">Sync Data</string>
+
     <string name="notes">Notes</string>
     <string name="no_notes">No Notes</string>
     <string name="close">Close</string>
+
+    <string name="Save">Save</string>
 
 
 </resources>

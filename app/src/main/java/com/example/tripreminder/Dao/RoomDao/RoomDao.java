@@ -36,9 +36,14 @@ public interface RoomDao {
 
     @Query("UPDATE trips_table SET status='Cancelled' WHERE tripID = :id")
     Completable tripCancelled(int id);
+
     @Query("SELECT * FROM trips_table WHERE userID = :id")
     Single<List<Trip>> getTripsByUser(String id);
 
     @Query("DELETE FROM trips_table")
     Completable deleteAllRecords();
+
+    @Update
+    Completable EditTrip(Trip trip);
+
 }
