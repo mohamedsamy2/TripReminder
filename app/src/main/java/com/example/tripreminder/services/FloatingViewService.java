@@ -11,9 +11,18 @@ import android.view.WindowManager;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import androidx.recyclerview.widget.RecyclerView;
+
+import com.example.tripreminder.FloatingNotesAdapter;
 import com.example.tripreminder.R;
 import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
+
+import java.lang.reflect.Type;
+import java.util.ArrayList;
+import java.util.List;
 
 public class FloatingViewService extends Service implements View.OnClickListener{
 
@@ -21,8 +30,9 @@ public class FloatingViewService extends Service implements View.OnClickListener
     private View mFloatingView;
     private View collapsedView;
     private View expandedView;
-    ListView listView;
-    String[] listItem;
+    RecyclerView recyclerView;
+    FloatingNotesAdapter floatingNotesAdapter;
+    private List<String> notesList = new ArrayList<>();
     TextView textView;
 
     public FloatingViewService() {
@@ -57,7 +67,7 @@ public class FloatingViewService extends Service implements View.OnClickListener
         collapsedView = mFloatingView.findViewById(R.id.layoutCollapsed);
         expandedView = mFloatingView.findViewById(R.id.layoutExpanded);
 
-        listView=mFloatingView.findViewById(R.id.listView);
+        recyclerView=mFloatingView.findViewById(R.id.notesRecyclerView);
         textView=mFloatingView.findViewById(R.id.textView);
         //adding click listener to close button and expanded view
         mFloatingView.findViewById(R.id.buttonClose).setOnClickListener(this);
@@ -123,13 +133,21 @@ public class FloatingViewService extends Service implements View.OnClickListener
     public int onStartCommand(Intent intent, int flags, int startId) {
         String notes=intent.getStringExtra("notes");
         if (notes==null || notes.equals("")){
-            listItem=new String[]{"No Notes"};
+            textView.append("\nNo Notes");
+            Toast.makeText(this, getString(R.string.no_notes), Toast.LENGTH_LONG).show();
+            //listItem=new String[]{"No Notes"};
         }else{
-            listItem=new Gson().fromJson(notes,String[].class);
+            Type listType = new TypeToken<ArrayList<String>>() {}.getType();
+            notesList=new Gson().fromJson(notes,listType);
         }
-        final ArrayAdapter<String> adapter = new ArrayAdapter<String>(this,
-                android.R.layout.simple_list_item_1, android.R.id.text1, listItem);
-        listView.setAdapter(adapter);
+        if (notesList!=null){
+            floatingNotesAdapter=new FloatingNotesAdapter(this,notesList);
+            recyclerView.setAdapter(floatingNotesAdapter);
+            floatingNotesAdapter.setNotes(notesList);
+        }else{
+            Toast.makeText(this, getString(R.string.no_notes), Toast.LENGTH_LONG).show();
+        }
+
         return super.onStartCommand(intent, flags, startId);
     }
 }

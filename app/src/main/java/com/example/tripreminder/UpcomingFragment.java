@@ -123,7 +123,19 @@ public class UpcomingFragment extends Fragment implements UpcomingAdapter.OnItem
         mapIntent.setPackage("com.google.android.apps.maps");
         startActivity(mapIntent);
         startFloatingViewService(new Gson().toJson(upcomingList.get(position).getNotes()));
+    }
 
+    @Override
+    public void onViewNotesClickListener(int posation) {
+        if (upcomingList.get(posation).getNotes() !=null) {
+            Bundle bundle = new Bundle();
+            bundle.putString("notes", new Gson().toJson(upcomingList.get(posation).getNotes()));
+            NotesFragment notesFragment = new NotesFragment();
+            notesFragment.setArguments(bundle);
+            notesFragment.show(getParentFragmentManager(),"note_dialog");
+        }else{
+            Toast.makeText(getContext(), "This item doesn't have any notes", Toast.LENGTH_LONG).show();
+        }
     }
 
     private void startFloatingViewService(String notes) {

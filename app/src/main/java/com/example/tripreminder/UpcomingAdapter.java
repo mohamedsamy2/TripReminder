@@ -80,6 +80,12 @@ public class UpcomingAdapter extends RecyclerView.Adapter<UpcomingAdapter.ViewHo
 
             }
         });
+        holder.viewNoteBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                onItemClickLisener.onViewNotesClickListener(position);
+            }
+        });
 
 
 
@@ -94,6 +100,7 @@ public class UpcomingAdapter extends RecyclerView.Adapter<UpcomingAdapter.ViewHo
     public interface OnItemClickLisener{
         void onCancleClickLisener(Trip trip);
         void onStartClickLisener(int positon, String to);
+        void onViewNotesClickListener(int posation);
     }
 
 

@@ -199,7 +199,7 @@ public class MainActivity extends AppCompatActivity {
                     DataHolder.authUser=mAuth.getCurrentUser();
                     //txtUserName.setText(databaseUser.getUserName());
                     //txtEmail.setText(databaseUser.getEmail());
-                    saveDataInSharedPerefrence(databaseUser.getUserName(),databaseUser.getEmail());
+                    //saveDataInSharedPerefrence(databaseUser.getUserName(),databaseUser.getEmail());
 
                 }
 
