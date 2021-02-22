@@ -13,6 +13,10 @@
             android:id="@+id/nav_history"
             android:icon="@android:drawable/ic_menu_my_calendar"
             android:title="@string/History" />
+        <item
+            android:id="@+id/historyMap"
+            android:icon="@drawable/ic_map"
+            android:title="Map" />
 
     </group>
     <group android:checkableBehavior="single"
