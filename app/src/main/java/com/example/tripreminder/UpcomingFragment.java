@@ -22,6 +22,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
 
+import com.example.tripreminder.helper.AlarmHelper;
 import com.example.tripreminder.model.Trip;
 import com.example.tripreminder.Database.Room.RoomDatabase;
 import com.example.tripreminder.services.FloatingViewService;
@@ -48,12 +49,15 @@ public class UpcomingFragment extends Fragment implements UpcomingAdapter.OnItem
     RoomDatabase database;
     private static final int SYSTEM_ALERT_WINDOW_PERMISSION = 2084;
 
+    AlarmHelper alarmHelper;
+
 
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         database = RoomDatabase.getInstance(getContext());
+        alarmHelper=new AlarmHelper(getContext());
 
     }
 
@@ -183,6 +187,8 @@ public class UpcomingFragment extends Fragment implements UpcomingAdapter.OnItem
                             }
                             @Override
                             public void onComplete() {
+
+                                alarmHelper.cancelAlarm(trip);
 
                             }
                             @Override

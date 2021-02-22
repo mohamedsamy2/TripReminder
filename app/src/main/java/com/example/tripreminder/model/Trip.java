@@ -38,9 +38,9 @@ public class Trip implements Parcelable {
     public String status;
     public String type;
     public Trip() {
+
+        
     }
-
-
 
     public Trip(String tripName, String userID, String source, String destination, String date, String time, String status, String type,List<String> notes) {
         this.tripName = tripName;

@@ -33,17 +33,39 @@ public class AlarmReciever extends BroadcastReceiver {
     @Override
     public void onReceive(Context context, Intent intent) {
 
-       String gson=intent.getStringExtra("trip");
-       Trip trip=new Gson().fromJson(gson,Trip.class);
-       Log.i(TAG, ">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>onReceive: ");
+        Log.i(TAG, ">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>onReceive: " );
+
+
+       if(intent.getAction()==null) {
+           Log.i(TAG, ">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>onReceive: " );
+
+           String gson=intent.getStringExtra("trip");
+           Trip trip=new Gson().fromJson(gson,Trip.class);
+
+           Intent intent2 = new Intent("android.intent.action.MAIN");
+           intent2.setClass(context, DialogeTrip.class);
+           intent2.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+           intent2.putExtra("trip",new Gson().toJson(trip));
+           context.startActivity(intent2);
 
 
 
-        Intent intent2 = new Intent("android.intent.action.MAIN");
-        intent2.setClass(context, DialogeTrip.class);
-        intent2.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-        intent2.putExtra("trip",new Gson().toJson(trip));
-        context.startActivity(intent2);
+
+
+
+
+
+       }
+
+
+
+
+
+
+
+
+
+
 
        /* notificationManager= (NotificationManager) context.getSystemService(NOTIFICATION_SERVICE);
 

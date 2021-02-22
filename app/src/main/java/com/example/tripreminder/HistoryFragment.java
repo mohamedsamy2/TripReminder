@@ -11,14 +11,23 @@ import androidx.lifecycle.MutableLiveData;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.example.tripreminder.Database.Room.RoomDatabase;
+import com.example.tripreminder.model.Trip;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.google.firebase.auth.FirebaseAuth;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import io.reactivex.SingleObserver;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.disposables.Disposable;
+import io.reactivex.schedulers.Schedulers;
 
 public class HistoryFragment extends Fragment implements HistoryAdapter.OnClickItem {
 
@@ -28,18 +37,13 @@ public class HistoryFragment extends Fragment implements HistoryAdapter.OnClickI
     List<String> history=new ArrayList<>();
     FragmentActivity historyFragment=getActivity();
 
+    RoomDatabase database;
 
 
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        history.add("mostafa");
-        history.add("ahmed");
-        history.add("alaa");
-        history.add("mohamed");
-
-
 
     }
 

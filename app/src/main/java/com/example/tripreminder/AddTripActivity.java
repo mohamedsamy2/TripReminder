@@ -25,6 +25,7 @@ import android.widget.TimePicker;
 import android.widget.Toast;
 
 import com.example.tripreminder.Database.Room.RoomDatabase;
+import com.example.tripreminder.helper.AlarmHelper;
 import com.example.tripreminder.model.Trip;
 import com.example.tripreminder.reciever.AlarmReciever;
 import com.google.android.gms.common.api.Status;
@@ -57,6 +58,7 @@ public class AddTripActivity extends AppCompatActivity implements TimePickerDial
     TextView datePicked;
     Spinner tripTypes;
     Button addTrip;
+    AlarmHelper alarmHelper;
 
     static String TAG="main";
 
@@ -73,6 +75,7 @@ public class AddTripActivity extends AppCompatActivity implements TimePickerDial
         setContentView(R.layout.activity_add_trip);
 
 
+        alarmHelper=new AlarmHelper(this);
         initViews();
         initDropDownList();
         initGooglePlaces();
@@ -128,6 +131,7 @@ public class AddTripActivity extends AppCompatActivity implements TimePickerDial
                 trip.setStatus("Upcoming");
                 trip.setType(tripTypes.getSelectedItem().toString());
                 trip.setNotes(new ArrayList<>());
+                trip.setTripID((int) Calendar.getInstance().getTimeInMillis());
 
 
                 database.roomTripDao().insertTrip(trip).subscribeOn(Schedulers.computation())
@@ -140,7 +144,8 @@ public class AddTripActivity extends AppCompatActivity implements TimePickerDial
                             @Override
                             public void onComplete() {
 
-                                addAlarmManager(datePicked.getText().toString(),timePicked.getText().toString(),trip);
+
+                                alarmHelper.addAlarm(trip);
 
                                 finish();
 ;
@@ -228,62 +233,7 @@ public class AddTripActivity extends AppCompatActivity implements TimePickerDial
         datePicked.setText(dayOfMonth +"/"+(month+1)+"/"+year);
     }
 
-    private void addAlarmManager(String date,String time,Trip trip){
 
-        Log.i(TAG, "addAlarmManager: "+date);
-        Log.i(TAG, "addAlarmManager: "+time);
-
-        String[] arr=date.split("/");
-        Log.i(TAG, "addAlarmManager: "+arr[0]);
-        Log.i(TAG, "addAlarmManager: "+arr[1]);
-        Log.i(TAG, "addAlarmManager: "+arr[2]);
-
-        String[] timearr=time.split(" ")[0].split(":");
-        Calendar calendar=Calendar.getInstance();
-        switch (time.split(" ")[1]){
-            case "pm":
-                calendar.set(Calendar.HOUR_OF_DAY,Integer.parseInt(timearr[0])+12);
-                break;
-            case "am":
-                calendar.set(Calendar.HOUR_OF_DAY,Integer.parseInt(timearr[0]));
-                break;
-        }
-
-
-
-
-        calendar.set(Calendar.YEAR,Integer.parseInt(arr[2]));
-        calendar.set(Calendar.MONTH,Integer.parseInt(arr[1])-1);
-        calendar.set(Calendar.DAY_OF_MONTH,Integer.parseInt(arr[0]));
-        calendar.set(Calendar.MINUTE,Integer.parseInt(timearr[1]));
-        calendar.set(Calendar.SECOND,0);
-
-        Log.i(TAG, ">>>>>>>>>>addAlarmManager: "+calendar.getTime().toString());
-
-        intent=new Intent(getApplicationContext(), AlarmReciever.class);
-
-        intent.putExtra("trip",new Gson().toJson(trip));
-
-
-
-        alarmManager=(AlarmManager) getSystemService(Context.ALARM_SERVICE);
-        pendingIntent=PendingIntent.getBroadcast(AddTripActivity.this,1,intent,PendingIntent.FLAG_UPDATE_CURRENT);
-
-
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
-            Log.i(TAG, ">>>>>>>>>>>>>>>addAlarmManager:<<<<<<<<<<<<<<<<<<<<<<< ");
-
-            alarmManager.setExact(AlarmManager.RTC_WAKEUP,calendar.getTimeInMillis(),pendingIntent);
-        }else{
-
-
-            alarmManager.set(AlarmManager.RTC_WAKEUP,calendar.getTimeInMillis(),pendingIntent);
-        }
-
-
-
-
-    }
 
 
 }
