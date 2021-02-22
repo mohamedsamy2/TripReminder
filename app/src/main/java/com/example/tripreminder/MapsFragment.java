@@ -4,6 +4,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
+import android.graphics.Color;
 import android.location.Address;
 import android.location.Geocoder;
 import android.os.Bundle;
@@ -28,6 +29,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
+import java.util.Random;
 
 import io.reactivex.SingleObserver;
 import io.reactivex.android.schedulers.AndroidSchedulers;
@@ -40,9 +42,10 @@ public class MapsFragment extends Fragment {
     RoomDatabase database;
     Geocoder geocoder;
     List<Address> addresses;
-    Address address;
+    int color;
+    Random rnd;
     double startLong, endLong, startLat, endLat;
-
+    private static final String TAG = "MapsFragment";
     private OnMapReadyCallback callback = new OnMapReadyCallback() {
 
         /**
@@ -56,25 +59,28 @@ public class MapsFragment extends Fragment {
          */
         @Override
         public void onMapReady(GoogleMap googleMap) {
-//            LatLng sydney = new LatLng(-34, 151);
-//            googleMap.addMarker(new MarkerOptions().position(sydney).title("Marker in Sydney"));
-//            googleMap.moveCamera(CameraUpdateFactory.newLatLng(sydney));
 
             for (Trip trip: pastTrips)
             {
 
                 try {
-                    addresses = geocoder.getFromLocationName(trip.getSource(), 1);
+                    rnd = new Random();
+                    color = Color.argb(255, rnd.nextInt(256), rnd.nextInt(256), rnd.nextInt(256));
+                    addresses = geocoder.getFromLocationName(pastTrips.get(0).getSource(), 1);
                     Address address = addresses.get(0);
                     startLong = address.getLongitude();
                     startLat = address.getLatitude();
-
-
-                    addresses = geocoder.getFromLocationName(trip.getDestination(), 1);
+                    addresses = geocoder.getFromLocationName(pastTrips.get(0).getDestination(), 1);
                     address = addresses.get(0);
                     endLong = address.getLongitude();
                     endLat = address.getLatitude();
-
+                googleMap.addPolyline(new PolylineOptions()
+                            .clickable(true)
+                            .color(color)
+                            .add(
+                                    new LatLng(startLat, startLong),
+                                    new LatLng(endLat, endLong)
+                                    ));
 
 
                 } catch (IOException e) {
@@ -83,19 +89,15 @@ public class MapsFragment extends Fragment {
 
             }
 
-            Polyline polyline1 = googleMap.addPolyline(new PolylineOptions()
-                    .clickable(true)
-                    .add(
-                            new LatLng(-35.016, 143.321),
-                            new LatLng(-34.747, 145.592),
-                            new LatLng(-34.364, 147.891),
-                            new LatLng(-33.501, 150.217),
-                            new LatLng(-32.306, 149.248),
-                            new LatLng(-32.491, 147.309)));
+            Log.i(TAG, "onMapReady: " + endLat + " " + endLong);
 
-            googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(-23.684, 133.903), 4));
+            googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(endLat, endLong), 1));
+
+            googleMap.moveCamera(CameraUpdateFactory.zoomBy((float) (googleMap.getMaxZoomLevel()/2.0)));
+
 
         }
+
     };
 
     @Nullable
@@ -121,13 +123,7 @@ public class MapsFragment extends Fragment {
         super.onCreate(savedInstanceState);
         database = RoomDatabase.getInstance(getContext());
         geocoder = new Geocoder(getContext(), Locale.getDefault());
-
-    }
-
-    @Override
-    public void onStart() {
-        super.onStart();
-        database.roomTripDao().getUpcomingTripsByUser(FirebaseAuth.getInstance().getUid()).subscribeOn(Schedulers.computation())
+        database.roomTripDao().getPastTripsByUser(FirebaseAuth.getInstance().getUid()).subscribeOn(Schedulers.computation())
                 .observeOn(AndroidSchedulers.mainThread()).subscribe(new SingleObserver<List<Trip>>() {
             @Override
             public void onSubscribe(@io.reactivex.annotations.NonNull Disposable d) {
@@ -137,6 +133,7 @@ public class MapsFragment extends Fragment {
             @Override
             public void onSuccess(@io.reactivex.annotations.NonNull List<Trip> trips) {
                 pastTrips = trips;
+                Log.i(TAG, "onSuccess: " + trips.size());
             }
 
             @Override
@@ -146,6 +143,7 @@ public class MapsFragment extends Fragment {
         });
 
     }
+
 
 
 }

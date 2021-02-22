@@ -28,6 +28,7 @@ import com.google.android.libraries.places.widget.Autocomplete;
 import com.google.android.libraries.places.widget.model.AutocompleteActivityMode;
 
 import java.util.Arrays;
+import java.util.Calendar;
 import java.util.List;
 
 import io.reactivex.CompletableObserver;
@@ -104,31 +105,37 @@ public class EditTripActivity extends AppCompatActivity implements TimePickerDia
         saveTrip.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Log.i(TAG, "onClick: " + trip.getTripID() + trip.getTripName());
-                trip.setTripName(tripName.getText().toString());
-                trip.setSource("Giza");
-                trip.setDestination("Cairo");
-                trip.setDate(datePicked.getText().toString());
-                trip.setTime(timePicked.getText().toString());
-                trip.setType(tripTypes.getSelectedItem().toString());
-                database = RoomDatabase.getInstance(v.getContext());
-                database.roomTripDao().EditTrip(trip).subscribeOn(Schedulers.computation())
-                        .subscribe(new CompletableObserver() {
-                            @Override
-                            public void onSubscribe(@io.reactivex.annotations.NonNull Disposable d) {
+                if (tripName.getText().toString().isEmpty() || startPoint.getText().toString().isEmpty()
+                        || endPoint.getText().toString().isEmpty() || timePicked.getText().toString().isEmpty()
+                        || datePicked.getText().toString().isEmpty()) {
+                    Toast.makeText(EditTripActivity.this, "Please fill all fields to save trip", Toast.LENGTH_LONG).show();
+                } else {
+                    Log.i(TAG, "onClick: " + trip.getTripID() + trip.getTripName());
+                    trip.setTripName(tripName.getText().toString());
+                    trip.setSource(startPoint.getText().toString());
+                    trip.setDestination(endPoint.getText().toString());
+                    trip.setDate(datePicked.getText().toString());
+                    trip.setTime(timePicked.getText().toString());
+                    trip.setType(tripTypes.getSelectedItem().toString());
+                    database = RoomDatabase.getInstance(v.getContext());
+                    database.roomTripDao().EditTrip(trip).subscribeOn(Schedulers.computation())
+                            .subscribe(new CompletableObserver() {
+                                @Override
+                                public void onSubscribe(@io.reactivex.annotations.NonNull Disposable d) {
 
-                            }
+                                }
 
-                            @Override
-                            public void onComplete() {
-                                finish();
-                            }
+                                @Override
+                                public void onComplete() {
+                                    finish();
+                                }
 
-                            @Override
-                            public void onError(@io.reactivex.annotations.NonNull Throwable e) {
+                                @Override
+                                public void onError(@io.reactivex.annotations.NonNull Throwable e) {
 
-                            }
-                        });
+                                }
+                            });
+                }
             }
         });
     }
@@ -178,23 +185,26 @@ public class EditTripActivity extends AppCompatActivity implements TimePickerDia
 
     @Override
     public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
-        String AM_PM = " AM";
-        String mm_precede = "";
-        if (hourOfDay >= 12) {
-            AM_PM = " PM";
-            if (hourOfDay >=13 && hourOfDay < 24) {
-                hourOfDay -= 12;
-            }
-            else {
+        if (hourOfDay <= Calendar.getInstance().get(Calendar.HOUR_OF_DAY) && minute <= Calendar.getInstance().get(Calendar.MINUTE)) {
+            Toast.makeText(EditTripActivity.this, "This time has already passed, please choose a different time", Toast.LENGTH_LONG).show();
+        } else {
+            String AM_PM = " AM";
+            String mm_precede = "";
+            if (hourOfDay >= 12) {
+                AM_PM = " PM";
+                if (hourOfDay >= 13 && hourOfDay < 24) {
+                    hourOfDay -= 12;
+                } else {
+                    hourOfDay = 12;
+                }
+            } else if (hourOfDay == 0) {
                 hourOfDay = 12;
             }
-        } else if (hourOfDay == 0) {
-            hourOfDay = 12;
+            if (minute < 10) {
+                mm_precede = "0";
+            }
+            timePicked.setText("" + hourOfDay + ":" + mm_precede + minute + AM_PM);
         }
-        if (minute < 10) {
-            mm_precede = "0";
-        }
-        timePicked.setText( "" + hourOfDay + ":" + mm_precede + minute + AM_PM);
     }
 
     @Override
