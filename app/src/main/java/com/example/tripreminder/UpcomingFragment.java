@@ -121,12 +121,19 @@ public class UpcomingFragment extends Fragment implements UpcomingAdapter.OnItem
 
     @Override
     public void onStartClickLisener(int position, String to) {
-        setDoneStatus(upcomingList.get(position).getTripID());
-        Uri gmmIntentUri = Uri.parse("http://maps.google.com/maps?daddr="+to);
-        Intent mapIntent = new Intent(Intent.ACTION_VIEW, gmmIntentUri);
-        mapIntent.setPackage("com.google.android.apps.maps");
-        startActivity(mapIntent);
-        startFloatingViewService(new Gson().toJson(upcomingList.get(position).getNotes()));
+        if(checkFloatingViewServicePermission()) {
+            setDoneStatus(upcomingList.get(position).getTripID());
+            Uri gmmIntentUri = Uri.parse("http://maps.google.com/maps?daddr=" + to);
+            Intent mapIntent = new Intent(Intent.ACTION_VIEW, gmmIntentUri);
+            mapIntent.setPackage("com.google.android.apps.maps");
+            startActivity(mapIntent);
+            startFloatingViewService(new Gson().toJson(upcomingList.get(position).getNotes()));
+        }
+        else {
+            askPermission();
+            Toast.makeText(getContext(), "You need System Alert Window Permission to do this", Toast.LENGTH_SHORT).show();
+        }
+
     }
 
     @Override
@@ -142,21 +149,22 @@ public class UpcomingFragment extends Fragment implements UpcomingAdapter.OnItem
         }
     }
 
-    private void startFloatingViewService(String notes) {
-        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.M) {
-            getContext().startService(new Intent(getContext(), FloatingViewService.class).putExtra("notes",notes));
-        } else if (Settings.canDrawOverlays(getContext())) {
-            getContext().startService(new Intent(getContext(), FloatingViewService.class).putExtra("notes",notes));
-            //finish();
-        } else {
-            askPermission();
-            Toast.makeText(getContext(), "You need System Alert Window Permission to do this", Toast.LENGTH_SHORT).show();
-        }
+    private boolean checkFloatingViewServicePermission(){
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.M)
+            return true;
+        if (Settings.canDrawOverlays(getContext()))
+            return true;
+
+        return false;
     }
+
+    private void startFloatingViewService(String notes) {
+            getContext().startService(new Intent(getContext(), FloatingViewService.class).putExtra("notes",notes));
+    }
+
     private void askPermission() {
         Intent intent = new Intent(Settings.ACTION_MANAGE_OVERLAY_PERMISSION,
                 Uri.parse("package:" + getContext().getPackageName()));
-
         startActivityForResult(intent, SYSTEM_ALERT_WINDOW_PERMISSION);
     }
 
