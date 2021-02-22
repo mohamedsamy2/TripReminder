@@ -11,7 +11,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
-import android.provider.ContactsContract;
 import android.util.Log;
 import android.view.View;
 import android.widget.ArrayAdapter;
@@ -35,7 +34,6 @@ import com.google.android.libraries.places.widget.model.AutocompleteActivityMode
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.gson.Gson;
 
-import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
@@ -47,6 +45,8 @@ import io.reactivex.schedulers.Schedulers;
 
 public class AddTripActivity extends AppCompatActivity implements TimePickerDialog.OnTimeSetListener, DatePickerDialog.OnDateSetListener
 {
+    static final int PLACE_AUTOCOMPLETE_START_PLACE_REQUEST_CODE = 1;
+    static final int PLACE_AUTOCOMPLETE_END_PLACE_REQUEST_CODE = 2;
     RoomDatabase database;
     ImageButton datePickerBtn;
     ImageButton timePickerBtn;
@@ -57,7 +57,6 @@ public class AddTripActivity extends AppCompatActivity implements TimePickerDial
     TextView datePicked;
     Spinner tripTypes;
     Button addTrip;
-
     static String TAG="main";
 
     Intent intent;
@@ -97,10 +96,8 @@ public class AddTripActivity extends AppCompatActivity implements TimePickerDial
             @Override
             public void onClick(View v) {
                 List<Place.Field> fieldList = Arrays.asList(Place.Field.ADDRESS,Place.Field.LAT_LNG, Place.Field.NAME);
-
                 Intent intent = new Autocomplete.IntentBuilder(AutocompleteActivityMode.OVERLAY, fieldList).build(AddTripActivity.this);
-                intent.putExtra("button","start");
-                startActivityForResult(intent, 100);
+                startActivityForResult(intent, PLACE_AUTOCOMPLETE_START_PLACE_REQUEST_CODE);
             }
         });
 
@@ -109,8 +106,7 @@ public class AddTripActivity extends AppCompatActivity implements TimePickerDial
             public void onClick(View v) {
                 List<Place.Field> fieldList = Arrays.asList(Place.Field.ADDRESS,Place.Field.LAT_LNG, Place.Field.NAME);
                 Intent intent = new Autocomplete.IntentBuilder(AutocompleteActivityMode.OVERLAY, fieldList).build(AddTripActivity.this);
-                intent.putExtra("button","end");
-                startActivityForResult(intent, 100);
+                startActivityForResult(intent, PLACE_AUTOCOMPLETE_END_PLACE_REQUEST_CODE);
             }
         });
 
@@ -188,13 +184,13 @@ public class AddTripActivity extends AppCompatActivity implements TimePickerDial
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == 100 && resultCode == RESULT_OK)
+        if (resultCode == RESULT_OK)
         {
             Place place = Autocomplete.getPlaceFromIntent(data);
-            if(data.getStringExtra("button").equals("start"))
+            if(requestCode== PLACE_AUTOCOMPLETE_START_PLACE_REQUEST_CODE)
                 startPoint.setText(place.getAddress());
-            else if (data.getStringExtra("button").equals("end"))
-                startPoint.setText(place.getAddress());
+            else if (requestCode== PLACE_AUTOCOMPLETE_END_PLACE_REQUEST_CODE)
+                endPoint.setText(place.getAddress());
         }
         else {
             Status status = Autocomplete.getStatusFromIntent(data);
