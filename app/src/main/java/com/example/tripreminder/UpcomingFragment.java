@@ -131,7 +131,7 @@ public class UpcomingFragment extends Fragment implements UpcomingAdapter.OnItem
 
     @Override
     public void onViewNotesClickListener(int posation) {
-        if (upcomingList.get(posation).getNotes() !=null) {
+        if (upcomingList.get(posation).getNotes() !=null && !upcomingList.get(posation).getNotes().isEmpty()) {
             Bundle bundle = new Bundle();
             bundle.putString("notes", new Gson().toJson(upcomingList.get(posation).getNotes()));
             NotesFragment notesFragment = new NotesFragment();

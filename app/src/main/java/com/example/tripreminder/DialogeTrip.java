@@ -55,7 +55,6 @@ public class DialogeTrip extends AppCompatActivity {
         intent=getIntent();
         gson=intent.getStringExtra("trip");
         trip=new Gson().fromJson(gson,Trip.class);
-
         uri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_RINGTONE);
         uri2=RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
 

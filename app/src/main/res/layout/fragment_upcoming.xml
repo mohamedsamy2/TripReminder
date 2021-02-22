@@ -12,7 +12,7 @@
         android:id="@+id/upcomingRecycler"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-
+        android:padding="4dp"
         tools:listitem="@layout/upcoming_row" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
