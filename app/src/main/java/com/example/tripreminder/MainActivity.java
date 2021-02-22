@@ -110,6 +110,7 @@ public class MainActivity extends AppCompatActivity {
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {
                 switch (item.getItemId()) {
                     case R.id.nav_upcoming:
+                        fab.setVisibility(View.VISIBLE);
                         Toast.makeText(MainActivity.this,"UPCOMING",Toast.LENGTH_LONG).show();
                         getSupportActionBar().setTitle("Upcoming trips");
                         UpcomingFragment upcomingFragment = new UpcomingFragment();
@@ -120,6 +121,7 @@ public class MainActivity extends AppCompatActivity {
                         break;
 
                     case R.id.nav_history:
+                        fab.setVisibility(View.GONE);
                         Toast.makeText(MainActivity.this,"HISTORY",Toast.LENGTH_LONG).show();
                         getSupportActionBar().setTitle("Trips history");
                         HistoryFragment f = new HistoryFragment();
