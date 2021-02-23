@@ -12,12 +12,17 @@ import com.google.gson.Gson;
 import java.util.Calendar;
 
 
+
 public class AlarmHelper {
     static private String TAG="main";
     Context context;
     Intent intent;
     AlarmManager alarmManager;
     PendingIntent pendingIntent;
+    //AlarmMana
+
+
+
 
 
     public AlarmHelper(Context context) {
@@ -59,12 +64,23 @@ public class AlarmHelper {
         pendingIntent= PendingIntent.getBroadcast(context,trip.getTripID(),intent,0);
 
 
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            alarmManager.setExactAndAllowWhileIdle(AlarmManager.RTC_WAKEUP,calendar.getTimeInMillis(),pendingIntent);
+
+        }else{
+
+
+            alarmManager.set(AlarmManager.RTC_WAKEUP,calendar.getTimeInMillis(),pendingIntent);
+        }
+
+        /*alarmManager.setExact(AlarmManager.RTC_WAKEUP,calendar.getTimeInMillis(),pendingIntent);
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
+
             alarmManager.setExact(AlarmManager.RTC_WAKEUP,calendar.getTimeInMillis(),pendingIntent);
         }else{
             alarmManager.set(AlarmManager.RTC_WAKEUP,calendar.getTimeInMillis(),pendingIntent);
 
-        }
+        }*/
 
     }
 

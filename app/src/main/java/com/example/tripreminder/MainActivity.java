@@ -2,6 +2,7 @@ package com.example.tripreminder;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBarDrawerToggle;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
 import androidx.appcompat.widget.Toolbar;
@@ -12,14 +13,19 @@ import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
 import android.app.ProgressDialog;
+import android.content.ComponentName;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 
 import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.graphics.drawable.Drawable;
+import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
+import android.provider.Settings;
 import android.util.Log;
 
 import android.os.Bundle;
@@ -84,9 +90,25 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+
         mAuth=FirebaseAuth.getInstance();
         rootRef= FirebaseDatabase.getInstance().getReference();
         currentUser=mAuth.getCurrentUser();
+        //////////////////////////////////////////////////////////////////////
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O_MR1) {
+            //when screen is black but not locked it will light-up
+            setShowWhenLocked(true);
+            setTurnScreenOn(true);
+        }
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            if(!Settings.canDrawOverlays(this)) {
+                checkDrawOverAppsPermissionsDialog();
+            }
+        }
+        runBackgroundPermissions();
+///////////////////////////////////////////////////////////////////////////////////////
+
+
 
         setUpToolbar();
         navigationView = findViewById(R.id.navigation_menu);
@@ -354,6 +376,67 @@ public class MainActivity extends AppCompatActivity {
                     }
                 });
     }
+
+
+
+
+
+
+
+
+
+
+
+    //methods permissions
+    private void checkDrawOverAppsPermissionsDialog(){
+        new AlertDialog.Builder(this).setTitle("Permission request").setCancelable(false).setMessage("Allow Draw Over Apps Permission to be able to use application probably")
+                .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        drawOverAppPermission();
+                    }
+                }).setNegativeButton("No", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                errorWarningForNotGivingDrawOverAppsPermissions();
+            }
+        }).show();
+    }
+
+    private void errorWarningForNotGivingDrawOverAppsPermissions(){
+        new AlertDialog.Builder(this).setTitle("Warning").setCancelable(false).setMessage("Unfortunately the display over other apps permission" +
+                " is not granted so the application might not behave properly \nTo enable this permission kindly restart the application" )
+                .setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                    }
+                }).show();
+    }
+
+    public void runBackgroundPermissions() {
+        if (Build.VERSION.SDK_INT == Build.VERSION_CODES.M) {
+            if (Build.BRAND.equalsIgnoreCase("xiaomi")) {
+                Intent intent = new Intent();
+                intent.setComponent(new ComponentName("com.miui.securitycenter", "com.miui.permcenter.autostart.AutoStartManagementActivity"));
+                startActivity(intent);
+            } else if (Build.BRAND.equalsIgnoreCase("Honor") || Build.BRAND.equalsIgnoreCase("HUAWEI")) {
+                Intent intent = new Intent();
+                intent.setComponent(new ComponentName("com.huawei.systemmanager", "com.huawei.systemmanager.optimize.process.ProtectActivity"));
+                startActivity(intent);
+            }
+        }
+    }
+
+    public void drawOverAppPermission (){
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            if (!Settings.canDrawOverlays(this)) {
+                Intent intent = new Intent(Settings.ACTION_MANAGE_OVERLAY_PERMISSION,
+                        Uri.parse("package:" + getPackageName()));
+                startActivityForResult(intent, 80);
+            }
+        }
+    }
+
 
 
 }
