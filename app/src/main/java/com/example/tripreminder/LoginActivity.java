@@ -208,7 +208,7 @@ public class LoginActivity extends AppCompatActivity {
             uEmail=account.getEmail();
             uName=account.getDisplayName();
         }
-        loadingBar.setTitle(getString(R.string.creating_new_account));
+        loadingBar.setTitle(getString(R.string.signing_in));
         loadingBar.setMessage(getString(R.string.please_wait));
         loadingBar.setCanceledOnTouchOutside(false);
         loadingBar.show();
@@ -243,7 +243,7 @@ public class LoginActivity extends AppCompatActivity {
                                 saveDataInSharedPerefrence();
                                 //syncData();
                                 sendToMainActivity();
-                                Toast.makeText(LoginActivity.this, ""+R.string.account_created_successfully, Toast.LENGTH_SHORT).show();
+                                Toast.makeText(LoginActivity.this, ""+R.string.logged_is_successful, Toast.LENGTH_SHORT).show();
                                 loadingBar.dismiss();
                             }else{
                                 String message = task.getException().toString();
@@ -301,7 +301,7 @@ public class LoginActivity extends AppCompatActivity {
         finish();
     }
     private void saveDataInSharedPerefrence() {
-        SharedPreferences preferences = getPreferences(Context.MODE_PRIVATE);
+        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(LoginActivity.this);
         SharedPreferences.Editor editor=preferences.edit();
         editor.putString("Name",uName);
         editor.putString("Email",uEmail);

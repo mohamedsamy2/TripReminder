@@ -163,7 +163,7 @@ public class MainActivity extends AppCompatActivity {
 
 
 
-
+getDataFromSharedPerefrence();
     }
 
 
@@ -224,7 +224,7 @@ public class MainActivity extends AppCompatActivity {
 
                 }
             });
-            getDataFromSharedPerefrence();
+            //getDataFromSharedPerefrence();
 
         }
     }
@@ -320,7 +320,7 @@ public class MainActivity extends AppCompatActivity {
     }
     public void getDataFromSharedPerefrence(){
 
-        preferences = getPreferences(Context.MODE_PRIVATE);
+        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(MainActivity.this);
         txtUserName.setText(preferences.getString("Name","default"));
         txtEmail.setText(preferences.getString("Email","default"));
 

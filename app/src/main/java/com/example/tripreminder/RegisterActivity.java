@@ -174,7 +174,7 @@ public class RegisterActivity extends AppCompatActivity {
         finish();
     }
     private void saveDataInSharedPerefrence() {
-        SharedPreferences preferences = getPreferences(Context.MODE_PRIVATE);
+        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(RegisterActivity.this);
         SharedPreferences.Editor editor=preferences.edit();
         editor.putString("Name",uName);
         editor.putString("Email",uEmail);
