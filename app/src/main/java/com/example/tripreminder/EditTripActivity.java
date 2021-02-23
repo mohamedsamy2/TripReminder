@@ -20,6 +20,7 @@ import android.widget.TimePicker;
 import android.widget.Toast;
 
 import com.example.tripreminder.Database.Room.RoomDatabase;
+import com.example.tripreminder.helper.AlarmHelper;
 import com.example.tripreminder.model.Trip;
 import com.google.android.gms.common.api.Status;
 import com.google.android.libraries.places.api.Places;
@@ -49,11 +50,13 @@ public class EditTripActivity extends AppCompatActivity implements TimePickerDia
     Spinner tripTypes;
     Button saveTrip;
     Trip trip;
+    AlarmHelper alarmHelper;
     private static final String TAG = "EditTripActivity";
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_edit_trip);
+        alarmHelper=new AlarmHelper(this);
         Intent intent = getIntent();
         trip = intent.getParcelableExtra("trip");
         initViews();
@@ -127,6 +130,8 @@ public class EditTripActivity extends AppCompatActivity implements TimePickerDia
 
                                 @Override
                                 public void onComplete() {
+
+                                    alarmHelper.addAlarm(trip);
                                     finish();
                                 }
 

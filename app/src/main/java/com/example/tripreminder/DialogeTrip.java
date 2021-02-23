@@ -222,4 +222,11 @@ public class DialogeTrip extends AppCompatActivity {
         notificationManager.notify(1, builder.build());
 
     }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+
+        DialogeTrip.this.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_SENSOR);
+    }
 }

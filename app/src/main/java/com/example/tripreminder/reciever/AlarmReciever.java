@@ -37,23 +37,15 @@ public class AlarmReciever extends BroadcastReceiver {
 
 
        if(intent.getAction()==null) {
-           Log.i(TAG, ">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>onReceive: " );
+           //Log.i(TAG, ">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>onReceive: " );
 
            String gson=intent.getStringExtra("trip");
            Trip trip=new Gson().fromJson(gson,Trip.class);
-
            Intent intent2 = new Intent("android.intent.action.MAIN");
            intent2.setClass(context, DialogeTrip.class);
            intent2.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
            intent2.putExtra("trip",new Gson().toJson(trip));
            context.startActivity(intent2);
-
-
-
-
-
-
-
 
        }
 

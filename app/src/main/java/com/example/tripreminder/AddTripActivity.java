@@ -149,6 +149,7 @@ public class AddTripActivity extends AppCompatActivity implements TimePickerDial
 
                                     alarmHelper.addAlarm(trip);
 
+
                                     finish();
                                     ;
 
