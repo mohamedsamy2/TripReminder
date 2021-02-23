@@ -1,5 +1,6 @@
 package com.example.tripreminder;
 
+import android.app.DatePickerDialog;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
@@ -23,6 +24,7 @@ import com.example.tripreminder.Dao.firebaseDao.FirebaseTripsDao;
 import com.example.tripreminder.Dao.firebaseDao.FirebaseUserDao;
 import com.example.tripreminder.Database.Room.RoomDatabase;
 import com.example.tripreminder.Database.firebase.DataHolder;
+import com.example.tripreminder.helper.AlarmHelper;
 import com.example.tripreminder.model.FirebaseTrip;
 import com.example.tripreminder.model.Trip;
 import com.example.tripreminder.model.User;
@@ -46,6 +48,7 @@ import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
 
 import io.reactivex.CompletableObserver;
@@ -61,6 +64,7 @@ public class LoginActivity extends AppCompatActivity {
     private ProgressDialog loadingBar;
     private SignInButton btnGoogleLogin;
     private GoogleSignInClient googleSignInClient;
+    AlarmHelper alarmHelper;
     private int SIGN_IN_CODE=1;
     String uName,uEmail;
     List<Trip> tripList;
@@ -69,6 +73,7 @@ public class LoginActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
         mAuth = FirebaseAuth.getInstance();
+        alarmHelper=new AlarmHelper(this);
         initiatizeFields();
         GoogleSignInOptions googleSignInOptions = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
                 .requestIdToken(getString(R.string.default_web_client_id))
@@ -337,6 +342,43 @@ public class LoginActivity extends AppCompatActivity {
 
     private void saveFromFirebaseToRoom(List<Trip> tripList) {
         for (Trip trip:tripList){
+
+            if(trip.status=="Upcoming"){
+
+                String date=trip.getDate();
+                String time=trip.getTime();
+                String[] arr=date.split("/");
+                String[] timearr=time.split(" ")[0].split(":");
+                Calendar calendar=Calendar.getInstance();
+
+                if(time.split(" ")[1].equals("pm")){
+                    calendar.set(Calendar.YEAR,Integer.parseInt(arr[2]));
+                    calendar.set(Calendar.MONTH,Integer.parseInt(arr[1])-1);
+                    calendar.set(Calendar.DAY_OF_MONTH,Integer.parseInt(arr[0]));
+                    calendar.set(Calendar.HOUR,Integer.parseInt(timearr[0])+12);
+                    calendar.set(Calendar.MINUTE,Integer.parseInt(timearr[1]));
+                    calendar.set(Calendar.SECOND,0);
+
+                }else{
+
+                    calendar.set(Calendar.YEAR,Integer.parseInt(arr[2]));
+                    calendar.set(Calendar.MONTH,Integer.parseInt(arr[1])-1);
+                    calendar.set(Calendar.DAY_OF_MONTH,Integer.parseInt(arr[0]));
+                    calendar.set(Calendar.HOUR,Integer.parseInt(timearr[0]));
+                    calendar.set(Calendar.MINUTE,Integer.parseInt(timearr[1]));
+                    calendar.set(Calendar.SECOND,0);
+
+                }
+
+                if(calendar.getTime().before(Calendar.getInstance().getTime())){
+                    trip.setStatus("Cancelled");
+                }else{
+
+                    alarmHelper.addAlarm(trip);
+                }
+
+            }
+
 
             RoomDatabase.getInstance(LoginActivity.this).roomTripDao()
                     .insertTrip(trip).subscribeOn(Schedulers.computation())

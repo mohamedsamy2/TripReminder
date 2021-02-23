@@ -22,7 +22,8 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.TripReminder">
-        <activity android:name=".SplashActivity">
+        <activity android:name=".SplashActivity"
+            android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -50,7 +51,8 @@
             android:excludeFromRecents="false"
             android:launchMode="singleTask"
             android:taskAffinity=""
-            android:theme="@style/Theme.AppCompat.Light.Dialog.Alert" />
+            android:theme="@style/Theme.AppCompat.Light.Dialog.Alert"
+            android:screenOrientation="portrait"/>
 
         <receiver
             android:name=".reciever.AlarmReciever"
@@ -66,18 +68,25 @@
 
 
 
-        <activity android:name=".EditTripActivity" />
+        <activity android:name=".EditTripActivity"
+            android:screenOrientation="portrait"/>
 
         <service
             android:name=".services.FloatingViewService"
             android:enabled="true"
             android:exported="true" />
 
-        <activity android:name=".AddNotesActivity" />
-        <activity android:name=".RegisterActivity" />
-        <activity android:name=".LoginActivity" />
-        <activity android:name=".AddTripActivity" />
-        <activity android:name=".MainActivity">
+        <activity android:name=".AddNotesActivity"
+            android:screenOrientation="portrait"/>
+        <activity android:name=".RegisterActivity"
+            android:screenOrientation="portrait"/>
+        <activity android:name=".LoginActivity"
+            android:screenOrientation="portrait"/>
+        <activity android:name=".AddTripActivity"
+            android:screenOrientation="portrait"/>
+        <activity android:name=".MainActivity"
+            android:screenOrientation="portrait">
+
 
         </activity>
     </application>

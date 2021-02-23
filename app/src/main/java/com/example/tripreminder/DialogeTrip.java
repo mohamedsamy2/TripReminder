@@ -67,75 +67,6 @@ public class DialogeTrip extends AppCompatActivity {
         Log.i(TAG, "......................................onCreate: ");
 
 
-        if (intent.getStringExtra("action") == "start") {
-
-
-            Log.i(TAG, "onCreate: >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>statrt");
-
-            database.roomTripDao().tripStarted(trip.getTripID()).subscribeOn(Schedulers.computation())
-                    .subscribe(new CompletableObserver() {
-                        @Override
-                        public void onSubscribe(@NonNull Disposable d) {
-
-                        }
-
-                        @Override
-                        public void onComplete() {
-                            Log.i(TAG, "onComplete:done ");
-
-                            Uri gmmIntentUri = Uri.parse("http://maps.google.com/maps?daddr=" + trip.getDestination());
-                            Intent mapIntent = new Intent(Intent.ACTION_VIEW, gmmIntentUri);
-                            mapIntent.setPackage("com.google.android.apps.maps");
-                            startActivity(mapIntent);
-                            startFloatingViewService();
-
-                        }
-
-                        @Override
-                        public void onError(@NonNull Throwable e) {
-
-
-                        }
-                    });
-
-
-
-
-
-
-        } else if (intent.getStringExtra("action") == "cancle") {
-
-
-            Log.i(TAG, "onCreate: >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>cancle");
-            database.roomTripDao().tripCancelled(trip.getTripID()).subscribeOn(Schedulers.computation())
-                    .subscribe(new CompletableObserver() {
-                        @Override
-                        public void onSubscribe(@NonNull Disposable d) {
-
-                        }
-
-                        @Override
-                        public void onComplete() {
-                            Log.i(TAG, "onComplete:cancled ");
-                            finish();
-
-                        }
-
-                        @Override
-                        public void onError(@NonNull Throwable e) {
-
-                        }
-                    });
-
-
-
-
-
-        } else {
-
-
-            Log.i(TAG, "onCreate: action:"+intent.getAction()+intent.getStringExtra("action"));
-
 
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setTitle("Trip Reminder")
@@ -211,8 +142,6 @@ public class DialogeTrip extends AppCompatActivity {
                 NotificationCompat.Builder builder1 = notificationHelper.getChannelNotification();
                 notificationHelper.getManager().notify(trip.getTripID(), builder1.build());
 
-                // notificationManager= (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
-                //shoe(DialogeTrip.this,"first trip",trip.getTripName());
                 finish();
 
             }
@@ -222,7 +151,6 @@ public class DialogeTrip extends AppCompatActivity {
         dialog.show();
 
 
-    }
 
     }
 
