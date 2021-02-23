@@ -39,6 +39,7 @@ import com.example.tripreminder.Dao.firebaseDao.FirebaseUserDao;
 import com.example.tripreminder.Database.Room.RoomDatabase;
 import com.example.tripreminder.Database.firebase.DataHolder;
 import com.example.tripreminder.Database.firebase.FireBaseDB;
+import com.example.tripreminder.helper.AlarmHelper;
 import com.example.tripreminder.model.FirebaseTrip;
 import com.example.tripreminder.model.Trip;
 import com.example.tripreminder.model.User;
@@ -73,6 +74,7 @@ public class MainActivity extends AppCompatActivity {
     NavigationView navigationView;
     FloatingActionButton fab;
     TextView txtUserName,txtEmail;
+    AlarmHelper alarmHelper;
 
     private FirebaseUser currentUser;
     private FirebaseAuth mAuth;
@@ -90,6 +92,7 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        alarmHelper=new AlarmHelper(this);
 
         mAuth=FirebaseAuth.getInstance();
         rootRef= FirebaseDatabase.getInstance().getReference();
@@ -347,11 +350,41 @@ getDataFromSharedPerefrence();
     }
     public void logout(){
         //delete all trips
-        deleteAllTripsFromRoom();
-        FirebaseAuth.getInstance().signOut();
-        DataHolder.dataBaseUser=null;
-        DataHolder.authUser=null;
-        sendToLoginActivity();
+
+
+        RoomDatabase.getInstance(MainActivity.this).roomTripDao().getUpcomingTripsByUser(FirebaseAuth.getInstance().getUid())
+                .subscribeOn(Schedulers.computation())
+                .observeOn(AndroidSchedulers.mainThread()).subscribe(new SingleObserver<List<Trip>>() {
+            @Override
+            public void onSubscribe(@io.reactivex.annotations.NonNull Disposable d) {
+
+                Log.i(TAG, "onSubscribe: "+FirebaseAuth.getInstance().getUid());
+
+            }
+
+            @Override
+            public void onSuccess(@io.reactivex.annotations.NonNull List<Trip> trips) {
+                if (trips.size()!=0){
+
+                    for(Trip trip:trips){
+                        alarmHelper.cancelAlarm(trip);
+                        Log.i(TAG, "onSuccess: "+trip.tripID);
+                    }
+                }
+                deleteAllTripsFromRoom();
+                FirebaseAuth.getInstance().signOut();
+                DataHolder.dataBaseUser=null;
+                DataHolder.authUser=null;
+                sendToLoginActivity();
+            }
+
+            @Override
+            public void onError(@io.reactivex.annotations.NonNull Throwable e) {
+                Log.i(TAG, "onError: ");
+            }
+        });
+
+
     }
 
     private void deleteAllTripsFromRoom() {
@@ -374,16 +407,6 @@ getDataFromSharedPerefrence();
                     }
                 });
     }
-
-
-
-
-
-
-
-
-
-
 
     //methods permissions
     private void checkDrawOverAppsPermissionsDialog(){
