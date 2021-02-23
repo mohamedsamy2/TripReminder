@@ -59,6 +59,7 @@ public class AddTripActivity extends AppCompatActivity implements TimePickerDial
     Spinner tripTypes;
     Button addTrip;
     AlarmHelper alarmHelper;
+    int year,month,day;
 
     static String TAG="main";
 
@@ -146,12 +147,8 @@ public class AddTripActivity extends AppCompatActivity implements TimePickerDial
                                 @Override
                                 public void onComplete() {
 
-
                                     alarmHelper.addAlarm(trip);
-
-
                                     finish();
-                                    ;
 
                                 }
 
@@ -160,7 +157,41 @@ public class AddTripActivity extends AppCompatActivity implements TimePickerDial
 
                                 }
                             });
+
+                    if (tripTypes.getSelectedItem().toString().equals("Round trip"))
+                    {
+                        database = RoomDatabase.getInstance(AddTripActivity.this);
+                        Trip tripBack = new Trip();
+                        tripBack.setUserID(FirebaseAuth.getInstance().getUid());
+                        tripBack.setTripName(tripName.getText().toString());
+                        tripBack.setSource(endPoint.getText().toString());
+                        tripBack.setDestination(startPoint.getText().toString());
+                        tripBack.setStatus("Upcoming");
+                        tripBack.setType(tripTypes.getSelectedItem().toString());
+                        tripBack.setNotes(new ArrayList<>());
+
+                        database.roomTripDao().insertTrip(tripBack).subscribeOn(Schedulers.computation())
+                                .subscribe(new CompletableObserver() {
+                                    @Override
+                                    public void onSubscribe(@io.reactivex.annotations.NonNull Disposable d) {
+
+                                    }
+
+                                    @Override
+                                    public void onComplete() {
+                                        finish();
+                                    }
+
+                                    @Override
+                                    public void onError(@io.reactivex.annotations.NonNull Throwable e) {
+
+                                    }
+                                });
+                    }
+
                 }
+
+
             }
         });
 
@@ -213,7 +244,9 @@ public class AddTripActivity extends AppCompatActivity implements TimePickerDial
 
     @Override
     public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
-        if(hourOfDay <= Calendar.getInstance().get(Calendar.HOUR_OF_DAY)  && minute <= Calendar.getInstance().get(Calendar.MINUTE)) {
+        Calendar calendar = Calendar.getInstance();
+
+        if(hourOfDay <= calendar.get(Calendar.HOUR_OF_DAY)  && minute <= calendar.get(Calendar.MINUTE)) {
             Toast.makeText(AddTripActivity.this, "This time has already passed, please choose a different time", Toast.LENGTH_LONG).show();
         }
         else {
@@ -238,6 +271,9 @@ public class AddTripActivity extends AppCompatActivity implements TimePickerDial
 
     @Override
     public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
+        this.year = year;
+        this.month = month;
+        this.day = dayOfMonth;
         datePicked.setText(dayOfMonth +"/"+(month+1)+"/"+year);
     }
 

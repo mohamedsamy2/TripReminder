@@ -27,7 +27,9 @@ import com.google.android.libraries.places.api.Places;
 import com.google.android.libraries.places.api.model.Place;
 import com.google.android.libraries.places.widget.Autocomplete;
 import com.google.android.libraries.places.widget.model.AutocompleteActivityMode;
+import com.google.firebase.auth.FirebaseAuth;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
 import java.util.List;
@@ -140,6 +142,37 @@ public class EditTripActivity extends AppCompatActivity implements TimePickerDia
 
                                 }
                             });
+
+                    if (tripTypes.getSelectedItem().toString().equals("Round trip"))
+                    {
+                        database = RoomDatabase.getInstance(EditTripActivity.this);
+                        Trip tripBack = new Trip();
+                        tripBack.setUserID(FirebaseAuth.getInstance().getUid());
+                        tripBack.setTripName(tripName.getText().toString());
+                        tripBack.setSource(endPoint.getText().toString());
+                        tripBack.setDestination(startPoint.getText().toString());
+                        tripBack.setStatus("Upcoming");
+                        tripBack.setType(tripTypes.getSelectedItem().toString());
+                        tripBack.setNotes(new ArrayList<>());
+
+                        database.roomTripDao().insertTrip(tripBack).subscribeOn(Schedulers.computation())
+                                .subscribe(new CompletableObserver() {
+                                    @Override
+                                    public void onSubscribe(@io.reactivex.annotations.NonNull Disposable d) {
+
+                                    }
+
+                                    @Override
+                                    public void onComplete() {
+                                        finish();
+                                    }
+
+                                    @Override
+                                    public void onError(@io.reactivex.annotations.NonNull Throwable e) {
+
+                                    }
+                                });
+                    }
                 }
             }
         });
