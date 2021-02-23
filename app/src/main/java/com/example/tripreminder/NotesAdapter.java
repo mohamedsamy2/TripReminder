@@ -79,7 +79,7 @@ public class NotesAdapter extends RecyclerView.Adapter<NotesAdapter.ViewHolder>{
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
             delete=itemView.findViewById(R.id.delete_note_row);
-            edit=itemView.findViewById(R.id.edit_note_row);
+
             txt=itemView.findViewById(R.id.txt_note_row);
 
         }

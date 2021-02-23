@@ -232,6 +232,7 @@ public class DialogeTrip extends AppCompatActivity {
 
 
 
+
    private void startFloatingViewService() {
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.M) {
             this.startService(new Intent(this, FloatingViewService.class));

@@ -66,21 +66,55 @@ public class AlarmReciever extends BroadcastReceiver {
             Log.i(TAG, "................onReceive:start ");
             String gson=intent.getStringExtra("trip");
             trip=new Gson().fromJson(gson,Trip.class);
-            Intent intent2 = new Intent(context,MainActivity.class);
-            intent2.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
 
-            notificationHelper=new NotificationHelper(context,trip);
-            notificationHelper.getManager().cancel(trip.getTripID());
+            database=RoomDatabase.getInstance(context);
+            database.roomTripDao().tripStarted(trip.getTripID()).subscribeOn(Schedulers.computation())
+                    .subscribe(new CompletableObserver() {
+                        @Override
+                        public void onSubscribe(@NonNull Disposable d) {
 
-            context.startActivity(intent2);
+                        }
+
+                        @Override
+                        public void onComplete() {
+                            Log.i(TAG, "onComplete:done ");
+
+
+                            Uri gmmIntentUri = Uri.parse("http://maps.google.com/maps?daddr=" + trip.getDestination());
+                            Intent mapIntent = new Intent(Intent.ACTION_VIEW, gmmIntentUri);
+                            mapIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                            mapIntent.setPackage("com.google.android.apps.maps");
+                            Log.i(TAG, "onComplete: before");
+                            context.startActivity(mapIntent);
+                            Log.i(TAG, "onComplete: startActivity");
+
+                            notificationHelper=new NotificationHelper(context,trip);
+                            notificationHelper.getManager().cancel(trip.getTripID());
+
+                        }
+
+                        @Override
+                        public void onError(@NonNull Throwable e) {
+
+
+                        }
+                    });
+
+
+
+
+
+
+
 
         }else if(intent.getAction()=="cancle"){
             Log.i(TAG, "................onReceive:cancle ");
 
             String gson=intent.getStringExtra("trip");
             trip=new Gson().fromJson(gson,Trip.class);
-            notificationHelper=new NotificationHelper(context,trip);
-            notificationHelper.getManager().cancel(trip.getTripID());
+
+            database=RoomDatabase.getInstance(context);
+
 
             database.roomTripDao().tripCancelled(trip.getTripID()).subscribeOn(Schedulers.computation())
                     .subscribe(new CompletableObserver() {
@@ -93,11 +127,14 @@ public class AlarmReciever extends BroadcastReceiver {
                         public void onComplete() {
                             Log.i(TAG, "onComplete:cancled ");
 
+                            notificationHelper=new NotificationHelper(context,trip);
+                            notificationHelper.getManager().cancel(trip.getTripID());
 
                         }
 
                         @Override
                         public void onError(@NonNull Throwable e) {
+                            Log.i(TAG, "onError: "+e.getMessage());
 
                         }
                     });
