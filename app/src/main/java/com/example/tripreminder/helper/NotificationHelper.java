@@ -74,13 +74,13 @@ public class NotificationHelper extends ContextWrapper {
                 .setContentText(trip.getDestination())
                 .setSmallIcon(R.drawable.ic_launcher_background)
                 .setAutoCancel(false)
+                .setOngoing(true)
                 .setSound(sound).setWhen(System.currentTimeMillis())
                 .setDefaults(Notification.DEFAULT_VIBRATE | Notification.DEFAULT_SOUND | Notification.FLAG_SHOW_LIGHTS)
                 .setLights(0xff00ff00, 300, 100)
                 .setContentIntent(pendingIntent)
                 .addAction(R.id.icon_only,"start",pendingIntent)
-                .addAction(R.id.icon_only,"cancle",pendingIntent)
-                .addAction(R.id.icon_only,"snooze",pendingIntent);
+                .addAction(R.id.icon_only,"cancle",pendingIntent);
 
 
     }

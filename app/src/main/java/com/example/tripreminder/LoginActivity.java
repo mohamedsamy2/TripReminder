@@ -333,6 +333,7 @@ public class LoginActivity extends AppCompatActivity {
 
     private void saveFromFirebaseToRoom(List<Trip> tripList) {
         for (Trip trip:tripList){
+
             RoomDatabase.getInstance(LoginActivity.this).roomTripDao()
                     .insertTrip(trip).subscribeOn(Schedulers.computation())
                     .subscribe(new CompletableObserver() {
@@ -344,7 +345,6 @@ public class LoginActivity extends AppCompatActivity {
                         public void onComplete() {
                             Log.e("login",trip.getTripName());
                         }
-
                         @Override
                         public void onError(@io.reactivex.annotations.NonNull Throwable e) {
 
