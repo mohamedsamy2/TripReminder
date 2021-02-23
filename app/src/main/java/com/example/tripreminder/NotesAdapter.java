@@ -23,7 +23,6 @@ public class NotesAdapter extends RecyclerView.Adapter<NotesAdapter.ViewHolder>{
     }
 
     List<String> getList(){
-
         return list;
     }
 
@@ -51,15 +50,6 @@ public class NotesAdapter extends RecyclerView.Adapter<NotesAdapter.ViewHolder>{
                 notifyDataSetChanged();
             }
         });
-        holder.edit.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-
-
-
-            }
-        });
-
 
     }
 

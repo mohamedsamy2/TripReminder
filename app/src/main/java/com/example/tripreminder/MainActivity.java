@@ -160,6 +160,7 @@ public class MainActivity extends AppCompatActivity {
 
                     case R.id.historyMap:
 
+                        fab.setVisibility(View.GONE);
                         getSupportActionBar().setTitle("Past trips map");
                         MapsFragment mapsFragment = new MapsFragment();
                         mgr = getSupportFragmentManager();
