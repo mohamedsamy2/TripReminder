@@ -27,6 +27,7 @@ import com.example.tripreminder.model.Trip;
 import com.example.tripreminder.Database.Room.RoomDatabase;
 import com.example.tripreminder.services.FloatingViewService;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.google.android.material.snackbar.Snackbar;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.gson.Gson;
 
@@ -48,7 +49,6 @@ public class UpcomingFragment extends Fragment implements UpcomingAdapter.OnItem
     List<Trip> upcomingList = new ArrayList<>();
     RoomDatabase database;
     private static final int SYSTEM_ALERT_WINDOW_PERMISSION = 2084;
-
     AlarmHelper alarmHelper;
 
 
@@ -75,6 +75,9 @@ public class UpcomingFragment extends Fragment implements UpcomingAdapter.OnItem
 
             @Override
             public void onSuccess(@io.reactivex.annotations.NonNull List<Trip> trips) {
+                if (trips.size()==0)
+                    Toast.makeText(getContext(),"You have no upcoming trips", Toast.LENGTH_SHORT).show();
+
                 upcomingList = trips;
                 upcomingAdapter.setList(trips);
                 upcomingAdapter.notifyDataSetChanged();
@@ -181,7 +184,7 @@ public class UpcomingFragment extends Fragment implements UpcomingAdapter.OnItem
     }
     private void openDialog(Context context, Trip trip) {
         AlertDialog.Builder builder1 = new AlertDialog.Builder(context);
-        builder1.setTitle("Are you sure delete trip " + trip.getTripName() + " ? ");
+        builder1.setTitle("Are you sure you want to delete " + trip.getTripName() + " ? ");
         builder1.setCancelable(false);
         builder1.setPositiveButton("Delete", new DialogInterface.OnClickListener() {
             @Override

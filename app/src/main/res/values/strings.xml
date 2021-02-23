@@ -69,6 +69,8 @@
     <string name="close">Close</string>
 
     <string name="Save">Save</string>
+    <string name="trip_reminder">Trip Reminder</string>
+    <string name="password_validation">Password should be 6 character or more</string>
 
 
 </resources>

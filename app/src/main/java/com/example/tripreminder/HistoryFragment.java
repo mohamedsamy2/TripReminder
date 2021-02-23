@@ -73,6 +73,9 @@ public class HistoryFragment extends Fragment implements HistoryAdapter.OnItemCl
 
             @Override
             public void onSuccess(@io.reactivex.annotations.NonNull List<Trip> trips) {
+                if (trips.size()==0)
+                    Toast.makeText(getContext(),"You have no past trips", Toast.LENGTH_SHORT).show();
+
                 historyList = trips;
                 historyAdapter.setList(trips);
                 historyAdapter.notifyDataSetChanged();

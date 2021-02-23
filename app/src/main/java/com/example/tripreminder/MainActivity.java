@@ -134,9 +134,6 @@ public class MainActivity extends AppCompatActivity {
                     case R.id.nav_upcoming:
 
                         fab.setVisibility(View.VISIBLE);
-                        Toast.makeText(MainActivity.this,"UPCOMING",Toast.LENGTH_LONG).show();
-
-//                        Toast.makeText(MainActivity.this,"UPCOMING",Toast.LENGTH_LONG).show();
                         getSupportActionBar().setTitle("Upcoming trips");
                         UpcomingFragment upcomingFragment = new UpcomingFragment();
                         mgr = getSupportFragmentManager();
@@ -146,9 +143,8 @@ public class MainActivity extends AppCompatActivity {
                         break;
 
                     case R.id.nav_history:
+
                         fab.setVisibility(View.GONE);
-                        Toast.makeText(MainActivity.this,"HISTORY",Toast.LENGTH_LONG).show();
-//                        Toast.makeText(MainActivity.this,"HISTORY",Toast.LENGTH_LONG).show();
                         getSupportActionBar().setTitle("Trips history");
                         HistoryFragment f = new HistoryFragment();
                         mgr = getSupportFragmentManager();
@@ -158,12 +154,12 @@ public class MainActivity extends AppCompatActivity {
                         break;
 
                     case R.id.nav_sync:
-//                        Toast.makeText(MainActivity.this,"SYNC",Toast.LENGTH_LONG).show();
-                        //sync with firebase
+
                         syncWithFirebase();
                         break;
 
                     case R.id.historyMap:
+
                         getSupportActionBar().setTitle("Past trips map");
                         MapsFragment mapsFragment = new MapsFragment();
                         mgr = getSupportFragmentManager();
@@ -172,6 +168,7 @@ public class MainActivity extends AppCompatActivity {
                         break;
 
                     case R.id.nav_logout:
+
                         logout();
                         break;
 
@@ -185,7 +182,7 @@ public class MainActivity extends AppCompatActivity {
 
 
 
-
+getDataFromSharedPerefrence();
     }
 
 
@@ -246,7 +243,7 @@ public class MainActivity extends AppCompatActivity {
 
                 }
             });
-            getDataFromSharedPerefrence();
+            //getDataFromSharedPerefrence();
 
         }
     }
@@ -342,7 +339,7 @@ public class MainActivity extends AppCompatActivity {
     }
     public void getDataFromSharedPerefrence(){
 
-        preferences = getPreferences(Context.MODE_PRIVATE);
+        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(MainActivity.this);
         txtUserName.setText(preferences.getString("Name","default"));
         txtEmail.setText(preferences.getString("Email","default"));
 
