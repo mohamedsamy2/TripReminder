@@ -141,6 +141,10 @@ public class RegisterActivity extends AppCompatActivity {
             Toast.makeText(this,getString(R.string.please_enter_password), Toast.LENGTH_SHORT).show();
             valid=false;
         }
+        if (password.length()<6){
+            Toast.makeText(this,getString(R.string.password_validation), Toast.LENGTH_SHORT).show();
+            valid=false;
+        }
         return valid;
     }
 

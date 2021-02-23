@@ -10,7 +10,7 @@
         android:id="@+id/imgLogo"
         android:layout_width="150dp"
         android:layout_height="150dp"
-        android:src="@drawable/ic_user_name"
+        android:src="@mipmap/ic_launcher"
         android:padding="12dp"
         app:civ_border_color="@color/purple_500"
         app:civ_border_width="1dp"
