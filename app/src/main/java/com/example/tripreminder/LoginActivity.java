@@ -355,7 +355,11 @@ public class LoginActivity extends AppCompatActivity {
                     calendar.set(Calendar.YEAR,Integer.parseInt(arr[2]));
                     calendar.set(Calendar.MONTH,Integer.parseInt(arr[1])-1);
                     calendar.set(Calendar.DAY_OF_MONTH,Integer.parseInt(arr[0]));
-                    calendar.set(Calendar.HOUR,Integer.parseInt(timearr[0])+12);
+                    if(Integer.parseInt(timearr[0])==12) {
+                        calendar.set(Calendar.HOUR, Integer.parseInt(timearr[0]));
+                    }else{
+                        calendar.set(Calendar.HOUR, Integer.parseInt(timearr[0]) + 12);
+                    }
                     calendar.set(Calendar.MINUTE,Integer.parseInt(timearr[1]));
                     calendar.set(Calendar.SECOND,0);
 
@@ -364,7 +368,11 @@ public class LoginActivity extends AppCompatActivity {
                     calendar.set(Calendar.YEAR,Integer.parseInt(arr[2]));
                     calendar.set(Calendar.MONTH,Integer.parseInt(arr[1])-1);
                     calendar.set(Calendar.DAY_OF_MONTH,Integer.parseInt(arr[0]));
-                    calendar.set(Calendar.HOUR,Integer.parseInt(timearr[0]));
+                    if(Integer.parseInt(timearr[0])==12){
+                        calendar.set(Calendar.HOUR, Integer.parseInt(timearr[0])-12);
+                    }else {
+                        calendar.set(Calendar.HOUR, Integer.parseInt(timearr[0]));
+                    }
                     calendar.set(Calendar.MINUTE,Integer.parseInt(timearr[1]));
                     calendar.set(Calendar.SECOND,0);
 

@@ -93,17 +93,15 @@ public class DialogeTrip extends AppCompatActivity {
                                         mapIntent.setPackage("com.google.android.apps.maps");
                                         startActivity(mapIntent);
                                         startFloatingViewService();
+                                        finish();
 
                                     }
 
                                     @Override
                                     public void onError(@NonNull Throwable e) {
 
-
                                     }
                                 });
-
-
                     }
                 })
                 .setNegativeButton("cancel", new DialogInterface.OnClickListener() {
