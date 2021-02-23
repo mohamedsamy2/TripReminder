@@ -60,40 +60,63 @@ public class MapsFragment extends Fragment {
         @Override
         public void onMapReady(GoogleMap googleMap) {
 
-            for (Trip trip: pastTrips)
-            {
+            database = RoomDatabase.getInstance(getContext());
+            geocoder = new Geocoder(getContext(), Locale.getDefault());
+            database.roomTripDao().getPastTripsByUser(FirebaseAuth.getInstance().getUid()).subscribeOn(Schedulers.computation())
+                    .observeOn(AndroidSchedulers.mainThread()).subscribe(new SingleObserver<List<Trip>>() {
+                @Override
+                public void onSubscribe(@io.reactivex.annotations.NonNull Disposable d) {
 
-                try {
-                    rnd = new Random();
-                    color = Color.argb(255, rnd.nextInt(256), rnd.nextInt(256), rnd.nextInt(256));
-                    addresses = geocoder.getFromLocationName(pastTrips.get(0).getSource(), 1);
-                    Address address = addresses.get(0);
-                    startLong = address.getLongitude();
-                    startLat = address.getLatitude();
-                    addresses = geocoder.getFromLocationName(pastTrips.get(0).getDestination(), 1);
-                    address = addresses.get(0);
-                    endLong = address.getLongitude();
-                    endLat = address.getLatitude();
-                googleMap.addPolyline(new PolylineOptions()
-                            .clickable(true)
-                            .color(color)
-                            .add(
-                                    new LatLng(startLat, startLong),
-                                    new LatLng(endLat, endLong)
-                                    ));
-
-
-                } catch (IOException e) {
-                    e.printStackTrace();
                 }
 
-            }
+                @Override
+                public void onSuccess(@io.reactivex.annotations.NonNull List<Trip> trips) {
 
-            Log.i(TAG, "onMapReady: " + endLat + " " + endLong);
+                    Log.i(TAG, "onSuccess: roomPastTrips");
+                    for (Trip trip: trips)
+                    {
 
-            googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(endLat, endLong), 1));
+                        try {
+                            rnd = new Random();
+                            color = Color.argb(255, rnd.nextInt(256), rnd.nextInt(256), rnd.nextInt(256));
+                            addresses = geocoder.getFromLocationName(trip.getSource(), 1);
+                            Address address = addresses.get(0);
+                            startLong = address.getLongitude();
+                            startLat = address.getLatitude();
+                            addresses = geocoder.getFromLocationName(trip.getDestination(), 1);
+                            address = addresses.get(0);
+                            endLong = address.getLongitude();
+                            endLat = address.getLatitude();
+                            googleMap.addPolyline(new PolylineOptions()
+                                    .clickable(true)
+                                    .color(color)
+                                    .add(
+                                            new LatLng(startLat, startLong),
+                                            new LatLng(endLat, endLong)
+                                    ));
+                            Log.i(TAG, "onMapReady: " + endLat + " " + endLong);
 
-            googleMap.moveCamera(CameraUpdateFactory.zoomBy((float) (googleMap.getMaxZoomLevel()/2.0)));
+
+
+
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
+
+                    }
+                    Log.i(TAG, "onMapReady: afterloop " + endLat + " " + endLong);
+
+                    googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(endLat, endLong), 1));
+                }
+
+                @Override
+                public void onError(@io.reactivex.annotations.NonNull Throwable e) {
+                    Log.i(TAG, "onError: " + e.getMessage());
+                }
+            });
+
+
+
 
 
         }
@@ -121,26 +144,7 @@ public class MapsFragment extends Fragment {
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        database = RoomDatabase.getInstance(getContext());
-        geocoder = new Geocoder(getContext(), Locale.getDefault());
-        database.roomTripDao().getPastTripsByUser(FirebaseAuth.getInstance().getUid()).subscribeOn(Schedulers.computation())
-                .observeOn(AndroidSchedulers.mainThread()).subscribe(new SingleObserver<List<Trip>>() {
-            @Override
-            public void onSubscribe(@io.reactivex.annotations.NonNull Disposable d) {
 
-            }
-
-            @Override
-            public void onSuccess(@io.reactivex.annotations.NonNull List<Trip> trips) {
-                pastTrips = trips;
-                Log.i(TAG, "onSuccess: " + trips.size());
-            }
-
-            @Override
-            public void onError(@io.reactivex.annotations.NonNull Throwable e) {
-
-            }
-        });
 
     }
 
