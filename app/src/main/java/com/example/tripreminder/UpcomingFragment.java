@@ -123,7 +123,8 @@ public class UpcomingFragment extends Fragment implements UpcomingAdapter.OnItem
     }
 
     @Override
-    public void onStartClickLisener(int position, String to) {
+    public void onStartClickLisener(int position, String to,Trip trip) {
+        alarmHelper.cancelAlarm(trip);
         if(checkFloatingViewServicePermission()) {
             setDoneStatus(upcomingList.get(position).getTripID());
             Uri gmmIntentUri = Uri.parse("http://maps.google.com/maps?daddr=" + to);
@@ -239,6 +240,7 @@ public class UpcomingFragment extends Fragment implements UpcomingAdapter.OnItem
 
                     @Override
                     public void onComplete() {
+
 
                     }
 

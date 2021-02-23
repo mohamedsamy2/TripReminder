@@ -14,6 +14,7 @@ import androidx.annotation.NonNull;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.recyclerview.widget.RecyclerView;
 import com.example.tripreminder.Database.Room.RoomDatabase;
+import com.example.tripreminder.helper.AlarmHelper;
 import com.example.tripreminder.model.Trip;
 import com.google.gson.Gson;
 import java.util.List;
@@ -29,11 +30,13 @@ public class UpcomingAdapter extends RecyclerView.Adapter<UpcomingAdapter.ViewHo
     Context context;
     List<Trip> list;
     RoomDatabase database;
+    AlarmHelper alarmHelper;
 
     OnItemClickLisener onItemClickLisener;
 
     public void setOnItemClickLisener(OnItemClickLisener onItemClickLisener) {
         this.onItemClickLisener = onItemClickLisener;
+
     }
 
     @NonNull
@@ -58,7 +61,8 @@ public class UpcomingAdapter extends RecyclerView.Adapter<UpcomingAdapter.ViewHo
             @Override
             public void onClick(View v) {
 
-                onItemClickLisener.onStartClickLisener(position,holder.toText.getText().toString().replace(" ","+"));
+                onItemClickLisener.onStartClickLisener(position,holder.toText.getText().toString().replace(" ","+"),list.get(position));
+
             }
         });
 
@@ -109,7 +113,7 @@ public class UpcomingAdapter extends RecyclerView.Adapter<UpcomingAdapter.ViewHo
 
     public interface OnItemClickLisener{
         void onCancleClickLisener(Trip trip);
-        void onStartClickLisener(int positon, String to);
+        void onStartClickLisener(int positon, String to,Trip trip);
         void onViewNotesClickListener(int posation);
     }
 
