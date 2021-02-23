@@ -130,7 +130,8 @@ public class UpcomingFragment extends Fragment implements UpcomingAdapter.OnItem
             Intent mapIntent = new Intent(Intent.ACTION_VIEW, gmmIntentUri);
             mapIntent.setPackage("com.google.android.apps.maps");
             startActivity(mapIntent);
-            startFloatingViewService(new Gson().toJson(upcomingList.get(position).getNotes()));
+            getContext().startService(new Intent(getContext(), FloatingViewService.class).putExtra("notes",new Gson().toJson(upcomingList.get(position).getNotes())));
+           // startFloatingViewService(new Gson().toJson(upcomingList.get(position).getNotes()));
         }
         else {
             askPermission();
