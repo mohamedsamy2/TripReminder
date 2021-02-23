@@ -15,11 +15,11 @@ import androidx.annotation.RequiresApi;
 import androidx.core.app.NotificationCompat;
 
 import com.example.tripreminder.AddNotesActivity;
-import com.example.tripreminder.DialogeTrip;
 import com.example.tripreminder.R;
 import com.example.tripreminder.UpcomingFragment;
 import com.example.tripreminder.model.Trip;
 import com.example.tripreminder.reciever.AlarmReciever;
+import com.google.gson.Gson;
 
 import java.io.Serializable;
 
@@ -29,12 +29,12 @@ public class NotificationHelper extends ContextWrapper {
 
 
     private NotificationManager mManager;
-    Context base;
+    Context context;
     Trip trip;
 
     public NotificationHelper(Context base, Trip trip) {
         super(base);
-        this.base = base;
+        this.context = base;
         this.trip =trip;
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             createChannel();
@@ -63,11 +63,17 @@ public class NotificationHelper extends ContextWrapper {
     }
 
     public NotificationCompat.Builder getChannelNotification() {
-        Intent intent = new Intent(base, AddNotesActivity.class);
-        //intent.putExtra("TripID", (Serializable) trip.getTripID());
+        Intent intentStart = new Intent(context, AlarmReciever.class);
+        intentStart.setAction("start");
+        intentStart.putExtra("trip",new Gson().toJson(trip));
+        PendingIntent pendingIntentStart = PendingIntent.getBroadcast(context,0,intentStart, PendingIntent.FLAG_CANCEL_CURRENT);
 
-        PendingIntent pendingIntent = PendingIntent.getActivity(this, trip.getTripID(), intent, 0);
-
+        /////////////////////////////////////////////////////////////////////////////////////////////////////////
+        Intent intentcancle = new Intent(context, AlarmReciever.class);
+        intentcancle.putExtra("trip",new Gson().toJson(trip));
+        intentcancle.setAction("cancle");
+        PendingIntent pendingIntentcancle = PendingIntent.getBroadcast(context,trip.getTripID(),intentcancle,PendingIntent.FLAG_CANCEL_CURRENT);
+        //////////////////////////////////////////////////////////////////////////////////////////////////////////
         Uri sound = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
         return new NotificationCompat.Builder(getApplicationContext(), channelID)
                 .setContentTitle(trip.getTripName() + "")
@@ -78,9 +84,9 @@ public class NotificationHelper extends ContextWrapper {
                 .setSound(sound).setWhen(System.currentTimeMillis())
                 .setDefaults(Notification.DEFAULT_VIBRATE | Notification.DEFAULT_SOUND | Notification.FLAG_SHOW_LIGHTS)
                 .setLights(0xff00ff00, 300, 100)
-                .setContentIntent(pendingIntent)
-                .addAction(R.id.icon_only,"start",pendingIntent)
-                .addAction(R.id.icon_only,"cancle",pendingIntent);
+                .setContentIntent(null)
+                .addAction(R.id.icon_only,"start",pendingIntentStart)
+                .addAction(R.id.icon_only,"cancle",pendingIntentcancle);
 
 
     }
@@ -89,7 +95,7 @@ public class NotificationHelper extends ContextWrapper {
 
         NotificationCompat.Builder builder = new NotificationCompat.Builder(this);
         builder.setSmallIcon(android.R.drawable.ic_dialog_alert);
-        Intent intent = new Intent(base, UpcomingFragment.class);
+        Intent intent = new Intent(context, UpcomingFragment.class);
         intent.putExtra("TripID", (Serializable) trip.getTripID());
         PendingIntent pendingIntent = PendingIntent.getActivity(this, trip.getTripID(), intent, 0);
         builder.setContentIntent(pendingIntent);

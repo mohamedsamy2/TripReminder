@@ -10,7 +10,7 @@ import com.example.tripreminder.model.Trip;
 import com.example.tripreminder.reciever.AlarmReciever;
 import com.google.gson.Gson;
 import java.util.Calendar;
-
+import java.util.Date;
 
 
 public class AlarmHelper {
@@ -19,11 +19,6 @@ public class AlarmHelper {
     Intent intent;
     AlarmManager alarmManager;
     PendingIntent pendingIntent;
-    //AlarmMana
-
-
-
-
 
     public AlarmHelper(Context context) {
 
@@ -36,24 +31,30 @@ public class AlarmHelper {
 
         String date=trip.getDate();
         String time=trip.getTime();
+        Log.i(TAG, "addAlarm: "+time);
         String[] arr=date.split("/");
         String[] timearr=time.split(" ")[0].split(":");
         Calendar calendar=Calendar.getInstance();
 
-        switch (time.split(" ")[1]){
-            case "pm":
-                calendar.set(Calendar.HOUR_OF_DAY,Integer.parseInt(timearr[0])+12);
-                break;
-            case "am":
-                calendar.set(Calendar.HOUR_OF_DAY,Integer.parseInt(timearr[0]));
-                break;
+        if(time.split(" ")[1].equals("pm")){
+            calendar.set(Calendar.YEAR,Integer.parseInt(arr[2]));
+            calendar.set(Calendar.MONTH,Integer.parseInt(arr[1])-1);
+            calendar.set(Calendar.DAY_OF_MONTH,Integer.parseInt(arr[0]));
+            calendar.set(Calendar.HOUR,Integer.parseInt(timearr[0])+12);
+            calendar.set(Calendar.MINUTE,Integer.parseInt(timearr[1]));
+            calendar.set(Calendar.SECOND,0);
+
+        }else{
+
+            calendar.set(Calendar.YEAR,Integer.parseInt(arr[2]));
+            calendar.set(Calendar.MONTH,Integer.parseInt(arr[1])-1);
+            calendar.set(Calendar.DAY_OF_MONTH,Integer.parseInt(arr[0]));
+            calendar.set(Calendar.HOUR,Integer.parseInt(timearr[0]));
+            calendar.set(Calendar.MINUTE,Integer.parseInt(timearr[1]));
+            calendar.set(Calendar.SECOND,0);
+
         }
 
-        calendar.set(Calendar.YEAR,Integer.parseInt(arr[2]));
-        calendar.set(Calendar.MONTH,Integer.parseInt(arr[1])-1);
-        calendar.set(Calendar.DAY_OF_MONTH,Integer.parseInt(arr[0]));
-        calendar.set(Calendar.MINUTE,Integer.parseInt(timearr[1]));
-        calendar.set(Calendar.SECOND,0);
 
         Log.i(TAG, ">>>>>>>>>>addAlarmManager: "+calendar.getTime().toString());
 
@@ -61,26 +62,18 @@ public class AlarmHelper {
         intent.putExtra("trip",new Gson().toJson(trip));
         alarmManager=(AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
         Log.i(TAG, "addAlarm: "+trip.getTripID());
+
         pendingIntent= PendingIntent.getBroadcast(context,trip.getTripID(),intent,0);
 
-
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+
             alarmManager.setExactAndAllowWhileIdle(AlarmManager.RTC_WAKEUP,calendar.getTimeInMillis(),pendingIntent);
 
         }else{
 
-
             alarmManager.set(AlarmManager.RTC_WAKEUP,calendar.getTimeInMillis(),pendingIntent);
         }
 
-        /*alarmManager.setExact(AlarmManager.RTC_WAKEUP,calendar.getTimeInMillis(),pendingIntent);
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
-
-            alarmManager.setExact(AlarmManager.RTC_WAKEUP,calendar.getTimeInMillis(),pendingIntent);
-        }else{
-            alarmManager.set(AlarmManager.RTC_WAKEUP,calendar.getTimeInMillis(),pendingIntent);
-
-        }*/
 
     }
 
@@ -93,9 +86,6 @@ public class AlarmHelper {
         pendingIntent= PendingIntent.getBroadcast(context,trip.getTripID(),intent,PendingIntent.FLAG_CANCEL_CURRENT);
         alarmManager.cancel(pendingIntent);
 
-
-
-
     }
 
 
@@ -104,56 +94,3 @@ public class AlarmHelper {
 
 
 
-   /* private void addAlarmManager(String date,String time,Trip trip){
-
-        Log.i(TAG, "addAlarmManager: "+date);
-        Log.i(TAG, "addAlarmManager: "+time);
-
-        String[] arr=date.split("/");
-        Log.i(TAG, "addAlarmManager: "+arr[0]);
-        Log.i(TAG, "addAlarmManager: "+arr[1]);
-        Log.i(TAG, "addAlarmManager: "+arr[2]);
-
-        String[] timearr=time.split(" ")[0].split(":");
-        Calendar calendar=Calendar.getInstance();
-        switch (time.split(" ")[1]){
-            case "pm":
-                calendar.set(Calendar.HOUR_OF_DAY,Integer.parseInt(timearr[0])+12);
-                break;
-            case "am":
-                calendar.set(Calendar.HOUR_OF_DAY,Integer.parseInt(timearr[0]));
-                break;
-        }
-
-        calendar.set(Calendar.YEAR,Integer.parseInt(arr[2]));
-        calendar.set(Calendar.MONTH,Integer.parseInt(arr[1])-1);
-        calendar.set(Calendar.DAY_OF_MONTH,Integer.parseInt(arr[0]));
-        calendar.set(Calendar.MINUTE,Integer.parseInt(timearr[1]));
-        calendar.set(Calendar.SECOND,0);
-
-        Log.i(TAG, ">>>>>>>>>>addAlarmManager: "+calendar.getTime().toString());
-
-        intent=new Intent(getApplicationContext(), AlarmReciever.class);
-
-        intent.putExtra("trip",new Gson().toJson(trip));
-
-
-
-        alarmManager=(AlarmManager) getSystemService(Context.ALARM_SERVICE);
-        pendingIntent=PendingIntent.getBroadcast(AddTripActivity.this,1,intent,PendingIntent.FLAG_UPDATE_CURRENT);
-
-
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
-            Log.i(TAG, ">>>>>>>>>>>>>>>addAlarmManager:<<<<<<<<<<<<<<<<<<<<<<< ");
-
-            alarmManager.setExact(AlarmManager.RTC_WAKEUP,calendar.getTimeInMillis(),pendingIntent);
-        }else{
-
-
-            alarmManager.set(AlarmManager.RTC_WAKEUP,calendar.getTimeInMillis(),pendingIntent);
-        }
-
-
-
-
-    }*/

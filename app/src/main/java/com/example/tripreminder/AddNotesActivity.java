@@ -71,7 +71,7 @@ public class AddNotesActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 database = RoomDatabase.getInstance(AddNotesActivity.this);
-                database.roomTripDao(). update(new Gson().toJson(notes) ,trip.getTripID()).subscribeOn(Schedulers.computation())
+                database.roomTripDao().update(new Gson().toJson(notes) ,trip.getTripID()).subscribeOn(Schedulers.computation())
                        .subscribe(new CompletableObserver() {
                     @Override
                     public void onSubscribe(@NonNull Disposable d) {

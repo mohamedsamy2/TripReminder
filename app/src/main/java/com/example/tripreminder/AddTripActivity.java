@@ -145,6 +145,8 @@ public class AddTripActivity extends AppCompatActivity implements TimePickerDial
 
                                 @Override
                                 public void onComplete() {
+                                    Log.i(TAG, "onComplete: "+trip.getTime());
+
 
 
                                     alarmHelper.addAlarm(trip);
