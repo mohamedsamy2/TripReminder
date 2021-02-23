@@ -53,6 +53,7 @@ public class EditTripActivity extends AppCompatActivity implements TimePickerDia
     Button saveTrip;
     Trip trip;
     AlarmHelper alarmHelper;
+    int year,month,day;
     private static final String TAG = "EditTripActivity";
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -70,6 +71,13 @@ public class EditTripActivity extends AppCompatActivity implements TimePickerDia
         timePicked.setText(trip.getTime());
         datePicked.setText(trip.getDate());
 
+        String[] date = trip.getDate().split("/");
+        day = Integer.valueOf(date[0]);
+        month = Integer.valueOf(date[1]) - 1;
+        year = Integer.valueOf(date[2]);
+        Log.i(TAG, "onCreate: ");
+        Log.i(TAG, "onCreate: date " + day + " " + month + " " + year);
+        Log.i(TAG, "onCreate: " + Calendar.getInstance().get(Calendar.DAY_OF_MONTH) + " " + Calendar.getInstance().get(Calendar.MONTH) + " " + Calendar.getInstance().get(Calendar.YEAR));
         datePickerBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -223,7 +231,11 @@ public class EditTripActivity extends AppCompatActivity implements TimePickerDia
 
     @Override
     public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
-        if (hourOfDay <= Calendar.getInstance().get(Calendar.HOUR_OF_DAY) && minute <= Calendar.getInstance().get(Calendar.MINUTE)) {
+        Calendar calendar = Calendar.getInstance();
+
+        if ( (day == calendar.get(Calendar.DAY_OF_MONTH) && month == calendar.get(Calendar.MONTH) && year == calendar.get(Calendar.YEAR))
+                &&
+                hourOfDay <= calendar.get(Calendar.HOUR_OF_DAY)  && minute <= calendar.get(Calendar.MINUTE)) {
             Toast.makeText(EditTripActivity.this, "This time has already passed, please choose a different time", Toast.LENGTH_LONG).show();
         } else {
             String AM_PM = " AM";
@@ -247,7 +259,11 @@ public class EditTripActivity extends AppCompatActivity implements TimePickerDia
 
     @Override
     public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
+        this.year = year;
+        this.month = month;
+        this.day = dayOfMonth;
         datePicked.setText(dayOfMonth +"/"+(month+1)+"/"+year);
+        timePicked.setText("");
     }
 
 }

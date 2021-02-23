@@ -60,7 +60,7 @@ public class AddTripActivity extends AppCompatActivity implements TimePickerDial
     Button addTrip;
     AlarmHelper alarmHelper;
     int year,month,day;
-
+    boolean datePickedCheck = false;
     static String TAG="main";
 
     Intent intent;
@@ -92,8 +92,13 @@ public class AddTripActivity extends AppCompatActivity implements TimePickerDial
         timePickerBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                TimePickerFragment timePicker = new TimePickerFragment();
-                timePicker.show(getSupportFragmentManager(), "TimePicker"); //show clock dialog
+                if(datePickedCheck) {
+                    TimePickerFragment timePicker = new TimePickerFragment();
+                    timePicker.show(getSupportFragmentManager(), "TimePicker"); //show clock dialog
+                }
+                else {
+                    Toast.makeText(AddTripActivity.this, "Please pick a date first", Toast.LENGTH_LONG).show();
+                }
             }
         });
 
@@ -246,7 +251,9 @@ public class AddTripActivity extends AppCompatActivity implements TimePickerDial
     public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
         Calendar calendar = Calendar.getInstance();
 
-        if(hourOfDay <= calendar.get(Calendar.HOUR_OF_DAY)  && minute <= calendar.get(Calendar.MINUTE)) {
+        if( (day == calendar.get(Calendar.DAY_OF_MONTH) && month == calendar.get(Calendar.MONTH) && year == calendar.get(Calendar.YEAR))
+                &&
+                hourOfDay <= calendar.get(Calendar.HOUR_OF_DAY)  && minute <= calendar.get(Calendar.MINUTE)) {
             Toast.makeText(AddTripActivity.this, "This time has already passed, please choose a different time", Toast.LENGTH_LONG).show();
         }
         else {
@@ -275,6 +282,8 @@ public class AddTripActivity extends AppCompatActivity implements TimePickerDial
         this.month = month;
         this.day = dayOfMonth;
         datePicked.setText(dayOfMonth +"/"+(month+1)+"/"+year);
+        timePicked.setText("");
+        datePickedCheck = true;
     }
 
 
