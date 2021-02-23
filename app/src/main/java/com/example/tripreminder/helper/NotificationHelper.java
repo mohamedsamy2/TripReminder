@@ -78,7 +78,7 @@ public class NotificationHelper extends ContextWrapper {
         return new NotificationCompat.Builder(getApplicationContext(), channelID)
                 .setContentTitle(trip.getTripName() + "")
                 .setContentText(trip.getDestination())
-                .setSmallIcon(R.drawable.ic_launcher_background)
+                .setSmallIcon(R.mipmap.ic_launcher)
                 .setAutoCancel(false)
                 .setOngoing(true)
                 .setSound(sound).setWhen(System.currentTimeMillis())
