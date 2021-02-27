@@ -72,12 +72,12 @@ public class DialogeTrip extends AppCompatActivity {
         builder.setTitle("Trip Reminder")
                 .setMessage(trip.getTripName()).setIcon(R.drawable.calendar)
                 .setCancelable(false)
-                .setPositiveButton("start", new DialogInterface.OnClickListener() {
+                .setPositiveButton("Start", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
 
                         ringtone.stop();
-                        database.roomTripDao().tripStarted(trip.getTripID()).subscribeOn(Schedulers.computation())
+                        database.roomTripDao().tripStarted(trip.getTripID()).subscribeOn(Schedulers.io())
                                 .subscribe(new CompletableObserver() {
                                     @Override
                                     public void onSubscribe(@NonNull Disposable d) {
@@ -109,7 +109,7 @@ public class DialogeTrip extends AppCompatActivity {
                     public void onClick(DialogInterface dialog, int which) {
                         ringtone.stop();
 
-                        database.roomTripDao().tripCancelled(trip.getTripID()).subscribeOn(Schedulers.computation())
+                        database.roomTripDao().tripCancelled(trip.getTripID()).subscribeOn(Schedulers.io())
                                 .subscribe(new CompletableObserver() {
                                     @Override
                                     public void onSubscribe(@NonNull Disposable d) {
@@ -118,7 +118,7 @@ public class DialogeTrip extends AppCompatActivity {
 
                                     @Override
                                     public void onComplete() {
-                                        Log.i(TAG, "onComplete:cancled ");
+                                        Log.i(TAG, "onComplete:Canceld ");
                                         finish();
 
                                     }
@@ -199,7 +199,7 @@ public class DialogeTrip extends AppCompatActivity {
             notificationManager.createNotificationChannel(channel);
             builder = new NotificationCompat.Builder(context, "CHANNEL_ID")
                     .addAction(R.drawable.clock, "Start", null)
-                    .addAction(R.drawable.clock, "Cancle", null)
+                    .addAction(R.drawable.clock, "Cancel", null)
                     .setDefaults(Notification.DEFAULT_VIBRATE | Notification.DEFAULT_SOUND | Notification.FLAG_SHOW_LIGHTS)
                     .setColor(2555)
                     .setAutoCancel(false)

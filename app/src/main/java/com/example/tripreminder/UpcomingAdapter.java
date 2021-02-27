@@ -71,7 +71,7 @@ public class UpcomingAdapter extends RecyclerView.Adapter<UpcomingAdapter.ViewHo
             @Override
             public void onClick(View v) {
 
-                onItemClickLisener.onCancleClickLisener(list.get(position));
+                onItemClickLisener.onCancelClickLisener(list.get(position));
             }
         });
 
@@ -112,7 +112,7 @@ public class UpcomingAdapter extends RecyclerView.Adapter<UpcomingAdapter.ViewHo
     }
 
     public interface OnItemClickLisener{
-        void onCancleClickLisener(Trip trip);
+        void onCancelClickLisener(Trip trip);
         void onStartClickLisener(int positon, String to,Trip trip);
         void onViewNotesClickListener(int posation);
     }

@@ -64,15 +64,15 @@ public class NotificationHelper extends ContextWrapper {
 
     public NotificationCompat.Builder getChannelNotification() {
         Intent intentStart = new Intent(context, AlarmReciever.class);
-        intentStart.setAction("start");
+        intentStart.setAction("Start");
         intentStart.putExtra("trip",new Gson().toJson(trip));
         PendingIntent pendingIntentStart = PendingIntent.getBroadcast(context,0,intentStart, PendingIntent.FLAG_CANCEL_CURRENT);
 
         /////////////////////////////////////////////////////////////////////////////////////////////////////////
-        Intent intentcancle = new Intent(context, AlarmReciever.class);
-        intentcancle.putExtra("trip",new Gson().toJson(trip));
-        intentcancle.setAction("cancle");
-        PendingIntent pendingIntentcancle = PendingIntent.getBroadcast(context,trip.getTripID(),intentcancle,PendingIntent.FLAG_CANCEL_CURRENT);
+        Intent intentCancel = new Intent(context, AlarmReciever.class);
+        intentCancel.putExtra("trip",new Gson().toJson(trip));
+        intentCancel.setAction("Cancel");
+        PendingIntent pendingIntentCancel = PendingIntent.getBroadcast(context,trip.getTripID(),intentCancel,PendingIntent.FLAG_CANCEL_CURRENT);
         //////////////////////////////////////////////////////////////////////////////////////////////////////////
         Uri sound = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
         return new NotificationCompat.Builder(getApplicationContext(), channelID)
@@ -85,8 +85,8 @@ public class NotificationHelper extends ContextWrapper {
                 .setDefaults(Notification.DEFAULT_VIBRATE | Notification.DEFAULT_SOUND | Notification.FLAG_SHOW_LIGHTS)
                 .setLights(0xff00ff00, 300, 100)
                 .setContentIntent(null)
-                .addAction(R.id.icon_only,"start",pendingIntentStart)
-                .addAction(R.id.icon_only,"cancle",pendingIntentcancle);
+                .addAction(R.id.icon_only,"Start",pendingIntentStart)
+                .addAction(R.id.icon_only,"Cancel",pendingIntentCancel);
 
 
     }

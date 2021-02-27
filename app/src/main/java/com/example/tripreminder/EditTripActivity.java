@@ -100,7 +100,7 @@ public class EditTripActivity extends AppCompatActivity implements TimePickerDia
                 List<Place.Field> fieldList = Arrays.asList(Place.Field.ADDRESS,Place.Field.LAT_LNG, Place.Field.NAME);
 
                 Intent intent = new Autocomplete.IntentBuilder(AutocompleteActivityMode.OVERLAY, fieldList).build(EditTripActivity.this);
-                intent.putExtra("button","start");
+                intent.putExtra("button","Start");
                 startActivityForResult(intent, 100);
             }
         });
@@ -131,7 +131,7 @@ public class EditTripActivity extends AppCompatActivity implements TimePickerDia
                     trip.setTime(timePicked.getText().toString());
                     trip.setType(tripTypes.getSelectedItem().toString());
                     database = RoomDatabase.getInstance(v.getContext());
-                    database.roomTripDao().EditTrip(trip).subscribeOn(Schedulers.computation())
+                    database.roomTripDao().EditTrip(trip).subscribeOn(Schedulers.io())
                             .subscribe(new CompletableObserver() {
                                 @Override
                                 public void onSubscribe(@io.reactivex.annotations.NonNull Disposable d) {
@@ -163,7 +163,7 @@ public class EditTripActivity extends AppCompatActivity implements TimePickerDia
                         tripBack.setType(tripTypes.getSelectedItem().toString());
                         tripBack.setNotes(new ArrayList<>());
 
-                        database.roomTripDao().insertTrip(tripBack).subscribeOn(Schedulers.computation())
+                        database.roomTripDao().insertTrip(tripBack).subscribeOn(Schedulers.io())
                                 .subscribe(new CompletableObserver() {
                                     @Override
                                     public void onSubscribe(@io.reactivex.annotations.NonNull Disposable d) {
@@ -218,7 +218,7 @@ public class EditTripActivity extends AppCompatActivity implements TimePickerDia
         if (requestCode == 100 && resultCode == RESULT_OK)
         {
             Place place = Autocomplete.getPlaceFromIntent(data);
-            if(data.getStringExtra("button").equals("start"))
+            if(data.getStringExtra("button").equals("Start"))
                 startPoint.setText(place.getAddress());
             else if (data.getStringExtra("button").equals("end"))
                 startPoint.setText(place.getAddress());

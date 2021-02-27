@@ -389,7 +389,7 @@ public class LoginActivity extends AppCompatActivity {
 
 
             RoomDatabase.getInstance(LoginActivity.this).roomTripDao()
-                    .insertTrip(trip).subscribeOn(Schedulers.computation())
+                    .insertTrip(trip).subscribeOn(Schedulers.io())
                     .subscribe(new CompletableObserver() {
                         @Override
                         public void onSubscribe(@io.reactivex.annotations.NonNull Disposable d) {

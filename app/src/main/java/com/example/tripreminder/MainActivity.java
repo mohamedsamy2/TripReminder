@@ -306,7 +306,7 @@ getDataFromSharedPerefrence();
 
     private void getTripsFromRoom() {
 
-        RoomDatabase.getInstance(MainActivity.this).roomTripDao().getTripsByUser(FirebaseAuth.getInstance().getUid()).subscribeOn(Schedulers.computation())
+        RoomDatabase.getInstance(MainActivity.this).roomTripDao().getTripsByUser(FirebaseAuth.getInstance().getUid()).subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread()).subscribe(new SingleObserver<List<Trip>>() {
             @Override
             public void onSubscribe(@io.reactivex.annotations.NonNull Disposable d) {
@@ -353,7 +353,7 @@ getDataFromSharedPerefrence();
 
 
         RoomDatabase.getInstance(MainActivity.this).roomTripDao().getUpcomingTripsByUser(FirebaseAuth.getInstance().getUid())
-                .subscribeOn(Schedulers.computation())
+                .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread()).subscribe(new SingleObserver<List<Trip>>() {
             @Override
             public void onSubscribe(@io.reactivex.annotations.NonNull Disposable d) {
@@ -389,7 +389,7 @@ getDataFromSharedPerefrence();
 
     private void deleteAllTripsFromRoom() {
         RoomDatabase.getInstance(MainActivity.this).roomTripDao().deleteAllRecords()
-                .subscribeOn(Schedulers.computation())
+                .subscribeOn(Schedulers.io())
                 .subscribe(new CompletableObserver() {
                     @Override
                     public void onSubscribe(@io.reactivex.annotations.NonNull Disposable d) {

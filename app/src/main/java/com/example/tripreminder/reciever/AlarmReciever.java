@@ -61,14 +61,14 @@ public class AlarmReciever extends BroadcastReceiver {
            intent2.putExtra("trip",new Gson().toJson(trip));
            context.startActivity(intent2);
 
-        }else if(intent.getAction()=="start"){
+        }else if(intent.getAction()=="Start"){
 
             Log.i(TAG, "................onReceive:start ");
             String gson=intent.getStringExtra("trip");
             trip=new Gson().fromJson(gson,Trip.class);
 
             database=RoomDatabase.getInstance(context);
-            database.roomTripDao().tripStarted(trip.getTripID()).subscribeOn(Schedulers.computation())
+            database.roomTripDao().tripStarted(trip.getTripID()).subscribeOn(Schedulers.io())
                     .subscribe(new CompletableObserver() {
                         @Override
                         public void onSubscribe(@NonNull Disposable d) {
@@ -107,8 +107,8 @@ public class AlarmReciever extends BroadcastReceiver {
 
 
 
-        }else if(intent.getAction()=="cancle"){
-            Log.i(TAG, "................onReceive:cancle ");
+        }else if(intent.getAction()=="Cancel"){
+            Log.i(TAG, "................onReceive:Cancel ");
 
             String gson=intent.getStringExtra("trip");
             trip=new Gson().fromJson(gson,Trip.class);
@@ -116,7 +116,7 @@ public class AlarmReciever extends BroadcastReceiver {
             database=RoomDatabase.getInstance(context);
 
 
-            database.roomTripDao().tripCancelled(trip.getTripID()).subscribeOn(Schedulers.computation())
+            database.roomTripDao().tripCancelled(trip.getTripID()).subscribeOn(Schedulers.io())
                     .subscribe(new CompletableObserver() {
                         @Override
                         public void onSubscribe(@NonNull Disposable d) {
@@ -125,7 +125,7 @@ public class AlarmReciever extends BroadcastReceiver {
 
                         @Override
                         public void onComplete() {
-                            Log.i(TAG, "onComplete:cancled ");
+                            Log.i(TAG, "onComplete:Canceld ");
 
                             notificationHelper=new NotificationHelper(context,trip);
                             notificationHelper.getManager().cancel(trip.getTripID());

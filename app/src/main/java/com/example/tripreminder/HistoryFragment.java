@@ -61,7 +61,7 @@ public class HistoryFragment extends Fragment implements HistoryAdapter.OnItemCl
     @Override
     public void onResume() {
         super.onResume();
-        database.roomTripDao().getPastTripsByUser(FirebaseAuth.getInstance().getUid()).subscribeOn(Schedulers.computation())
+        database.roomTripDao().getPastTripsByUser(FirebaseAuth.getInstance().getUid()).subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread()).subscribe(new SingleObserver<List<Trip>>() {
             @Override
             public void onSubscribe(@io.reactivex.annotations.NonNull Disposable d) {
@@ -142,13 +142,13 @@ public class HistoryFragment extends Fragment implements HistoryAdapter.OnItemCl
     }
     private void openDialog(Context context, Trip trip) {
         AlertDialog.Builder builder1 = new AlertDialog.Builder(context);
-        builder1.setTitle("Are you sure delete trip " + trip.getTripName() + " ? ");
+        builder1.setTitle("Are you sure you want to delete " + trip.getTripName() + " ? ");
         builder1.setCancelable(false);
         builder1.setPositiveButton("Delete", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 database = RoomDatabase.getInstance(getContext());
-                database.roomTripDao().deleteTrip(trip).subscribeOn(Schedulers.computation())
+                database.roomTripDao().deleteTrip(trip).subscribeOn(Schedulers.io())
                         .subscribe(new CompletableObserver() {
                             @Override
                             public void onSubscribe(@io.reactivex.annotations.NonNull Disposable d) {

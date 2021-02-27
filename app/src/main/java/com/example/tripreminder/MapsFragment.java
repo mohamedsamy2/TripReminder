@@ -62,7 +62,7 @@ public class MapsFragment extends Fragment {
 
             database = RoomDatabase.getInstance(getContext());
             geocoder = new Geocoder(getContext(), Locale.getDefault());
-            database.roomTripDao().getPastTripsByUser(FirebaseAuth.getInstance().getUid()).subscribeOn(Schedulers.computation())
+            database.roomTripDao().getPastTripsByUser(FirebaseAuth.getInstance().getUid()).subscribeOn(Schedulers.io())
                     .observeOn(AndroidSchedulers.mainThread()).subscribe(new SingleObserver<List<Trip>>() {
                 @Override
                 public void onSubscribe(@io.reactivex.annotations.NonNull Disposable d) {

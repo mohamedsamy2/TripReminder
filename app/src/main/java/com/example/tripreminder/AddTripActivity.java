@@ -142,7 +142,7 @@ public class AddTripActivity extends AppCompatActivity implements TimePickerDial
                     trip.setTripID((int) Calendar.getInstance().getTimeInMillis());
 
 
-                    database.roomTripDao().insertTrip(trip).subscribeOn(Schedulers.computation())
+                    database.roomTripDao().insertTrip(trip).subscribeOn(Schedulers.io())
                             .subscribe(new CompletableObserver() {
                                 @Override
                                 public void onSubscribe(@io.reactivex.annotations.NonNull Disposable d) {
@@ -177,7 +177,7 @@ public class AddTripActivity extends AppCompatActivity implements TimePickerDial
                         tripBack.setType(tripTypes.getSelectedItem().toString());
                         tripBack.setNotes(new ArrayList<>());
 
-                        database.roomTripDao().insertTrip(tripBack).subscribeOn(Schedulers.computation())
+                        database.roomTripDao().insertTrip(tripBack).subscribeOn(Schedulers.io())
                                 .subscribe(new CompletableObserver() {
                                     @Override
                                     public void onSubscribe(@io.reactivex.annotations.NonNull Disposable d) {

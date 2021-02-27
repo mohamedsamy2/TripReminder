@@ -88,7 +88,7 @@
             android:layout_marginRight="8dp"
             android:layout_marginBottom="8dp"
             android:background="@drawable/button_bg"
-            android:text="@string/start"
+            android:text="@string/Start"
             android:textColor="@color/purple_500"
             app:backgroundTint="@color/purple_500"
             app:layout_constraintBottom_toBottomOf="parent"
